@@ -10,12 +10,14 @@
 \geometry{verbose,lmargin=1.7cm,rmargin=1.7cm}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-\setcounter{secnumdepth}{1}
+\setcounter{secnumdepth}{0}
 \setcounter{tocdepth}{3}
 \setlength{\parskip}{\smallskipamount}
 \setlength{\parindent}{0pt}
 \usepackage{babel}
 \usepackage{float}
+\usepackage{enumitem}
+\usepackage{graphicx}
 \usepackage[unicode=true,
  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
  breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
@@ -48,9 +50,39 @@
 
 \chapter{Modeling}
 
-\newpage{}
-
 \section{The real system}
 
+The LISA Pathfinder grabbing position and relase mechanism (abbreviated
+as GPRM) is the system aimed to lock and relase the test mass (from
+now on TM) into the spacecraft. 
+
+In fact, forementioned TM has to be relased with a nearly zero velocity
+with respect to the transport spacecraft to be correctly injected
+into a geodesic trajectory (wich is what we aim for). 
+
+This task can be relatively complex, if we think of the possible interactions
+that develope with the support, and because of the electrostatic aspects
+that may generate disturbing forces. Also, least but not last, the
+quality of the surface of the test mass and of the grabbing finger
+should be take into account.
+The GPRM mechanism is sketched in Fig 1.
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.7]{gfx/GPRM}
+\par\end{centering}
+\caption{GPRM Mechanism}
+
+\end{figure}
+It's main parts are :
+\begin{itemize}
+\item \textit{Grabbing Finger} : holds the TM and positions it prior relase;
+\item \textit{Finger Tip} : last contact part that pons the TM in position before
+fast retraction for relase;
+\item \textit{Low Voltage Piezo Actuator} : used for the positioning and fast Finger;
+Tip relase;
+\item \textit{NEXLINE actuator} : used for Grabbing Finger movement;
+\item \textit{Displacemente Sensor} : to measure the axial force acting between the mechanism contacting interface
+\end{itemize}
 
 \end{document}

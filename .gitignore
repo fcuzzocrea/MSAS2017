@@ -3,4 +3,10 @@
 *.autosave
 .directory
 *.original
-*~
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lyx~
+*.m~

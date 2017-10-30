@@ -73,7 +73,7 @@ enumitem
 \end_index
 \leftmargin 1.7cm
 \rightmargin 1.7cm
-\secnumdepth 1
+\secnumdepth 0
 \tocdepth 3
 \paragraph_separation skip
 \defskip smallskip
@@ -202,7 +202,87 @@ The real system
 \end_layout
 
 \begin_layout Standard
+The LISA Pathfinder grabbing position and relase mechanism (abbreviated
+ as GPRM) is the system aimed to lock and relase the test mass (from now
+ on TM) into the spacecraft.
+ 
+\end_layout
 
+\begin_layout Standard
+In fact, forementioned TM has to be relased with a nearly zero velocity
+ with respect to the transport spacecraft to be correctly injected into
+ a geodesic trajectory (wich is what we aim for).
+ 
+\end_layout
+
+\begin_layout Standard
+This task can be relatively complex, if we think of the possible interactions
+ that develope with the support, and because of the electrostatic aspects
+ that may generate disturbing forces.
+ Also, least but not last, the quality of the surface of the test mass and
+ of the grabbing finger should be take into account.
+\end_layout
+
+\begin_layout Standard
+The GPRM mechanism is sketched in Fig 1.
+ It's main parts are :
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename gfx/GPRM.png
+	scale 70
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+GPRM Mechanism
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Grabbing Finger : holds the TM and positions it prior relase;
+\end_layout
+
+\begin_layout Itemize
+Finger Tip : last contact part that pons the TM in position before fast
+ retraction for relase;
+\end_layout
+
+\begin_layout Itemize
+Low Voltage Piezo Actuator : used for the positioning and fast Finger Tip
+ relase;
+\end_layout
+
+\begin_layout Itemize
+NEXLINE actuator : 
 \end_layout
 
 \end_body
