@@ -221,11 +221,7 @@ This task can be relatively complex, if we think of the possible interactions
  that may generate disturbing forces.
  Also, least but not last, the quality of the surface of the test mass and
  of the grabbing finger should be take into account.
-\end_layout
-
-\begin_layout Standard
-The GPRM mechanism is sketched in Fig 1.
- It's main parts are :
+ The GPRM mechanism is sketched in Fig 1.
 \end_layout
 
 \begin_layout Standard
@@ -267,22 +263,155 @@ GPRM Mechanism
 
 \end_layout
 
-\begin_layout Itemize
-Grabbing Finger : holds the TM and positions it prior relase;
+\begin_layout Standard
+It's main parts are :
 \end_layout
 
 \begin_layout Itemize
-Finger Tip : last contact part that pons the TM in position before fast
- retraction for relase;
+
+\shape italic
+Grabbing Finger
+\shape default
+ : holds the TM and positions it prior relase;
 \end_layout
 
 \begin_layout Itemize
-Low Voltage Piezo Actuator : used for the positioning and fast Finger Tip
- relase;
+
+\shape italic
+Finger Tip
+\shape default
+ : last contact part that pons the TM in position before fast retraction
+ for relase;
 \end_layout
 
 \begin_layout Itemize
-NEXLINE actuator : 
+
+\shape italic
+Low Voltage Piezo Actuator
+\shape default
+ : used for the positioning and fast Finger Tip relase;
+\end_layout
+
+\begin_layout Itemize
+
+\shape italic
+NEXLINE actuator
+\shape default
+ : used for Grabbing Finger movement;
+\end_layout
+
+\begin_layout Itemize
+
+\shape italic
+Displacemente Sensor
+\shape default
+ : to measure the axial force acting between the mechanism contacting interface;
+\end_layout
+
+\begin_layout Subsection
+Main Task
+\end_layout
+
+\begin_layout Standard
+The model of the injection procedure consist of three parts.
+ The GPRM (sketched in Fig.
+ 1), the adhesion phenomenon and the TM motion equations.
+ Two opposite GPRMs are operated simultaneously in order to hold the TM
+ with the Grabbing Fingers in the center of the Electriode Housing (EH).
+ From this configuration, the procedure can be cosidered symmetrical, as
+ the two mechanism are commanded in the same way :
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Pre-launch and launch phase
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The TM is held by the Caging Mechanism (CM) at the eight corners;
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\series bold
+TM Relase from CM
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The Grabbing Finger is in contract with the TM and the tip is fully retracted;
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+The contact between the GF and the TM has to perform the following functions
+ :
+\end_layout
+
+\begin_layout Description
+- Fix the TM during the relase of the CM;
+\end_layout
+
+\begin_layout Description
+- Centre the TM in the EH;
+\end_layout
+
+\begin_layout Description
+- Orient the TM with respect to the EH;
+\end_layout
+
+\begin_layout Standard
+This contact however not suitable for an undisturbate relase for geodesic
+ injection.
+ The relase tip must thus take over the TM pinning before relase.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Pass Over
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The RT moves forward until a contact force is recorded 
+\backslash
+item The GF is retracted a small amount to compensate for the movemente
+ of the RT;
+\end_layout
+
+\begin_layout Enumerate
+The force is then reduced to the lowes acceptable level that still controls
+ the postion of the TM;
+\end_layout
+
+\begin_layout Enumerate
+TM relase is performed by means of a fast contraction of the linear piezo
+ actuator, wich also commands the retraction of the tips;
+\end_layout
+
+\begin_layout Enumerate
+The TM is capture by the drag-free attitude and control system and take
+ finally to the nominal center of its housing;
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+We must pay attention to the fact that in presence od adhesion the fast
+ retraction may cause a momentum transfer from the RTs to TM.
+ 
+\end_layout
+
+\begin_layout Subsection
+The Physical System
+\end_layout
+
+\begin_layout Subsection
+The Mathematical Model
 \end_layout
 
 \end_body
