@@ -1,6 +1,6 @@
 %% LyX 2.2.3 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
-\documentclass[11pt,twocolumn,american]{article}
+\documentclass[10pt,twocolumn,american]{article}
 \usepackage[sc]{mathpazo}
 \usepackage[scaled=0.9]{helvet}
 \renewcommand{\ttdefault}{lmtt}
@@ -55,25 +55,26 @@
 \section{Introduction}
 	LISA (Laser Interferometer Space Antenna) is a science misson aimed at revealing gravitational waves by means of the formation distortion of 3 \textit{test masses} (TMs), each one in a different spacecraft, put in free-falling (geodesic) trajectories. Due to weak gravitational waves interaction, any force different from gravitational ones acting on TMs must be negligible, and TM release must meet the requirements listed in tab.1:
 	\begin{table}[H]
-		\begin{tabular}{l|l} \hline
-			parameter & tolerance \\ \hline
-			offset along x, y and z & $\pm 200 \mu m$\\
-			linear velocity along x, y and z & $\pm 5 \mu m/s$\\
-			angle around x, y and z & $\pm 2 mrad$\\
-			angular velocity around x, y, z& $\pm 100 \mu rad/s$\\ 
-		\end{tabular}
+		\begin{centering}
+			\begin{tabular}{l|l} \hline
+				parameter & tolerance \\ \hline
+				offset along x, y and z & $\pm 200 \mu m$\\
+				linear velocity along x, y and z & $\pm 5 \mu m/s$\\
+				angle around x, y and z & $\pm 2 mrad$\\
+				angular velocity around x, y, z& $\pm 100 \mu rad/s$\\ 
+			\end{tabular}
+		\end{centering}
 		\caption{requirements for TM release}
 	\end{table}
+
 \section{Modeling}
 	\subsection{The real system}	
 	The LISA Pathfinder grabbing position and relase mechanism (abbreviated
 	as GPRM) is the system aimed to lock and relase the test mass (from
 	now on TM) into the spacecraft. 
-	
 	In fact, forementioned TM has to be relased with a nearly zero velocity
 	with respect to the transport spacecraft to be correctly injected
-	into a geodesic trajectory (wich is what we aim for). 
-	
+	into a geodesic trajectory (wich is what we aim for). 	
 	This task can be relatively complex, if we think of the possible interactions
 	that develope with the support, and because of the electrostatic aspects
 	that may generate disturbing forces. Also, least but not last, the
@@ -83,7 +84,7 @@
 		
 	\begin{figure}[H]
 		\begin{centering}
-			\includegraphics[scale=0.3]{gfx/GPRM}
+			\includegraphics[scale=0.4]{gfx/GPRM}
 		\end{centering}
 		\caption{GPRM Mechanism}
 	\end{figure}
