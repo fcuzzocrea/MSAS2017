@@ -142,8 +142,9 @@ A=[0.000020466626554093456, 6.910665367794336e-11;
 0.004036141858452986, 0.000014963110868265205;
 0.0040719962332266615, 0.000014963221438911094];
 displacement_experimental = A(:,2)*1e6;     %displacement (output) in [micron]
+x_experimental = displacement_experimental(end)-displacement_experimental;
 time_experimental = A(:,1)*1e3;             %time in [ms]
 clear A
- plot(time_experimental,displacement_experimental)
+ plot(time_experimental,x_experimental)
 % xlabel('time [ms]')
 % ylabel('displacement [micrometers]')
