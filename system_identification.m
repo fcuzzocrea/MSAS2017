@@ -30,9 +30,11 @@ data = iddata(y_exp', input_voltage', Ts);
 %estimation
 opt = greyestOptions('SearchMethod','lm','InitialState','model','DisturbanceModel','none');
 par_est = greyest(data,m,opt);
+
 p = getpvec(par_est);
 s = diag(getcov(par_est));
 e = sqrt(s)./p;
+
 [~,~,~,~,~,x0] = par_system(p,0);
 opt = compareOptions('InitialCondition',x0);
 figure(2)
