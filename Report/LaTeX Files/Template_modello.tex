@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 %% LyX 2.2.3 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[twoside,american]{report}
@@ -139,3 +140,151 @@ fast retraction may cause a momentum transfer from the RTs to TM.
 
 \subsection{The Mathematical Model}
 \end{document}
+=======
+%% LyX 2.2.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+
+\documentclass[10pt,twocolumn,american]{article}
+\usepackage[sc]{mathpazo}
+\usepackage[scaled=0.9]{helvet}
+\renewcommand{\ttdefault}{lmtt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,lmargin=1.7cm,rmargin=1.7cm}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\setcounter{secnumdepth}{0}
+\setcounter{tocdepth}{3}
+\setlength{\parskip}{\smallskipamount}
+\setlength{\parindent}{0pt}
+\usepackage{babel}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage[unicode=true,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
+ {hyperref}
+\makeatletter
+
+% User specified LaTeX commands.
+\input{Settings.tex}
+\setlength{\textfloatsep}{\baselineskip}
+
+\makeatother
+
+\begin{document}
+
+\title{ \titlecap{\Large \myPhase} \rule{\linewidth}{0.01mm}  {\myTitle}}
+\date{\today}
+\author{\textbf{Authors} : {\myAuthorf, \myAuthors, \myAuthort}}
+
+% Put the abstract fullpage
+\twocolumn[
+\begin{@twocolumnfalse}
+	\maketitle
+	\rule{\linewidth}{0.5mm}
+		\begin{abstract}
+			\input{Abstract.tex}
+		\end{abstract}
+	\rule{\linewidth}{0.5mm}
+\end{@twocolumnfalse}
+]
+
+\pagenumbering{arabic}
+
+\section{Introduction}
+	LISA (Laser Interferometer Space Antenna) is a science misson aimed at revealing gravitational waves by means of the formation distortion of 3 \textit{test masses} (TMs), each one in a different spacecraft, put in free-falling (geodesic) trajectories. Due to weak gravitational waves interaction, any force different from gravitational ones acting on TMs must be negligible, and TM release must meet the requirements listed in tab.1:
+	\begin{table}[H]
+		\begin{centering}
+			\begin{tabular}{l|l} \hline
+				parameter & tolerance \\ \hline
+				offset along x, y and z & $\pm 200 \mu m$\\
+				linear velocity along x, y and z & $\pm 5 \mu m/s$\\
+				angle around x, y and z & $\pm 2 mrad$\\
+				angular velocity around x, y, z& $\pm 100 \mu rad/s$\\ 
+			\end{tabular}
+		\end{centering}
+		\caption{requirements for TM release}
+	\end{table}
+
+\section{Modeling}
+	\subsection{The real system}	
+	The LISA Pathfinder grabbing position and relase mechanism (abbreviated
+	as GPRM) is the system aimed to lock and relase the test mass (from
+	now on TM) into the spacecraft. 
+	In fact, forementioned TM has to be relased with a nearly zero velocity
+	with respect to the transport spacecraft to be correctly injected
+	into a geodesic trajectory (wich is what we aim for). 	
+	This task can be relatively complex, if we think of the possible interactions
+	that develope with the support, and because of the electrostatic aspects
+	that may generate disturbing forces. Also, least but not last, the
+	quality of the surface of the test mass and of the grabbing finger
+	should be take into account. The GPRM mechanism is sketched in Fig
+	1.
+		
+	\begin{figure}[H]
+		\begin{centering}
+			\includegraphics[scale=0.4]{gfx/GPRM}
+		\end{centering}
+		\caption{GPRM Mechanism}
+	\end{figure}
+	
+	It's main parts are :
+	\begin{itemize}
+		\item \textit{Grabbing Finger} : holds the TM and positions it prior relase;
+		\item \textit{Finger Tip} : last contact part that pons the TM in position before fast retraction for relase;
+		\item \textit{Low Voltage Piezo Actuator} : used for the positioning and fast Finger Tip relase;
+		\item \textit{NEXLINE actuator} : used for Grabbing Finger movement;
+		\item \textit{Displacemente Sensor} : to measure the axial force acting between the mechanism contacting interface;
+	\end{itemize}
+
+	\subsubsection{Main Task}
+	The model of the injection procedure consist of three parts. The GPRM
+	(sketched in Fig. 1), the adhesion phenomenon and the TM motion equations.
+	Two opposite GPRMs are operated simultaneously in order to hold the
+	TM with the Grabbing Fingers in the center of the Electriode Housing
+	(EH). From this configuration, the procedure can be cosidered symmetrical,
+	as the two mechanism are commanded in the same way :	
+	\begin{itemize}
+		\item \textbf{Pre-launch and launch phase}
+		\begin{enumerate}
+			\item The TM is held by the Caging Mechanism (CM) at the eight corners;
+		\end{enumerate}
+		\item \textbf{TM Relase from CM}
+		\begin{enumerate}
+			\item The Grabbing Finger is in contract with the TM and the tip is fully retracted;
+		\end{enumerate}
+	\end{itemize}	
+	The contact between the GF and the TM has to perform the following
+	functions :	
+	\begin{description}
+		\item [{-}] Fix the TM during the relase of the CM;
+		\item [{-}] Centre the TM in the EH;
+		\item [{-}] Orient the TM with respect to the EH;
+	\end{description}	
+	This contact however not suitable for an undisturbate relase for geodesic
+	injection. The relase tip must thus take over the TM pinning before
+	relase. 	
+	\begin{itemize}
+		\item \textbf{Pass Over}
+		\begin{enumerate}
+			\item The RT moves forward until a contact force is recorded 
+			\item The GF is	retracted a small amount to compensate for the movement of the RT;
+			\item The force is then reduced to the lowes acceptable level that still controls the postion 					of the TM;
+			\item TM relase is performed by means of a fast contraction of the linear piezo actuator,
+		        	wich also commands the retraction of the tips;
+			\item The TM is capture by the drag-free attitude and control system and take finally to the 					nominal center of its housing;
+		\end{enumerate}
+	\end{itemize}	
+	We must pay attention to the fact that in presence od adhesion the
+	fast retraction may cause a momentum transfer from the RTs to TM. 
+	
+
+\subsubsection{The Physical System}
+
+\subsubsection{The Mathematical Model}
+
+\end{document}
+>>>>>>> master
