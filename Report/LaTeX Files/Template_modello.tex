@@ -19,6 +19,7 @@
 \usepackage{float}
 \usepackage{enumitem}
 \usepackage{graphicx}
+\usepackage{todonotes}
 \usepackage[unicode=true,
  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
  breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
@@ -49,10 +50,12 @@
 \end{@twocolumnfalse}
 ]
 
-\pagenumbering{arabic}
+\pagenumbering{roman}
 
 \section{Introduction}
-	LISA (Laser Interferometer Space Antenna) is a science misson aimed at revealing gravitational waves by means of the formation distortion of 3 \textit{test masses} (TMs), each one in a different spacecraft, put in free-falling (geodesic) trajectories. Due to weak gravitational waves interaction, any force different from gravitational ones acting on TMs must be negligible, and TM release must meet the requirements listed in tab.1:
+	The LISA (Laser Interferometer Space Antenna) Pathfinder mission is a scientific mission aimed at revealing gravitational waves by means of the formation distortion of 3 \textit{Test Masses} (TMs), each one in a different spacecraft, put in a free-falling (geodesic) trajectory.\\
+	Due to weak gravitational waves interaction, any force different from the gravitational ones acting on TMs must be negligible, and the TM release must meet the requirements listed in tab.1:
+	
 	\begin{table}[H]
 		\begin{centering}
 			\begin{tabular}{l|l} \hline
@@ -68,18 +71,11 @@
 
 \section{Modeling}
 	\subsection{The real system}	
-	The LISA Pathfinder grabbing position and relase mechanism (abbreviated
-	as GPRM) is the system aimed to lock and relase the test mass (from
-	now on TM) into the spacecraft. 
-	In fact, forementioned TM has to be relased with a nearly zero velocity
-	with respect to the transport spacecraft to be correctly injected
-	into a geodesic trajectory (wich is what we aim for). 	
-	This task can be relatively complex, if we think of the possible interactions
-	that develope with the support, and because of the electrostatic aspects
-	that may generate disturbing forces. Also, least but not last, the
-	quality of the surface of the test mass and of the grabbing finger
-	should be take into account. The GPRM mechanism is sketched in Fig
-	1.
+	The LISA Pathfinder Grabbing Position and Relase Mechanism (GPRM) is the system aimed to lock and relase the TM into the spacecraft. 
+	In fact, the forementioned TM has to be relased with a nearly zero velocity with respect to the transport spacecraft in order to be correctly injected into a geodesic trajectory. \\
+	This task can be relatively complex, if we think of the possible interactions developing with the support, and because of the electrostatic aspects that may generate disturbing forces. \\
+	Also, least but not last, the quality of the surface of the test mass and of the grabbing finger should be take into account. \\ 
+	The GPRM mechanism is sketched in Fig 1.
 		
 	\begin{figure}[H]
 		\begin{centering}
@@ -98,12 +94,11 @@
 	\end{itemize}
 
 	\subsubsection{Main Task}
-	The model of the injection procedure consist of three parts. The GPRM
-	(sketched in Fig. 1), the adhesion phenomenon and the TM motion equations.
+	The model of the injection procedure consist of three parts.\\
+	The GPRM, the adhesion phenomenon and the TM motion equations.
 	Two opposite GPRMs are operated simultaneously in order to hold the
-	TM with the Grabbing Fingers in the center of the Electriode Housing
-	(EH). From this configuration, the procedure can be cosidered symmetrical,
-	as the two mechanism are commanded in the same way :	
+	TM with the Grabbing Fingers in the center of the Electrode Housing
+	(EH). From this configuration, the procedure can be considered to be symmetrical, as the two mechanism are commanded in the same way :	
 	\begin{itemize}
 		\item \textbf{Pre-launch and launch phase}
 		\begin{enumerate}
@@ -111,36 +106,74 @@
 		\end{enumerate}
 		\item \textbf{TM Relase from CM}
 		\begin{enumerate}
-			\item The Grabbing Finger is in contract with the TM and the tip is fully retracted;
+			\item The Grabbing Finger is in contact with the TM and the tip is fully retracted;
 		\end{enumerate}
 	\end{itemize}	
 	The contact between the GF and the TM has to perform the following
 	functions :	
 	\begin{description}
-		\item [{-}] Fix the TM during the relase of the CM;
-		\item [{-}] Centre the TM in the EH;
+		\item [{-}] Fix the TM during the release of the CM;
+		\item [{-}] Center the TM in the EH;
 		\item [{-}] Orient the TM with respect to the EH;
 	\end{description}	
-	This contact however not suitable for an undisturbate relase for geodesic
-	injection. The relase tip must thus take over the TM pinning before
-	relase. 	
+	This contact however not suitable for an undisturbated release for geodesic injection.\\ 
+	The release tip must thus take over the TM pinning before
+	release. 	
 	\begin{itemize}
 		\item \textbf{Pass Over}
 		\begin{enumerate}
 			\item The RT moves forward until a contact force is recorded 
 			\item The GF is	retracted a small amount to compensate for the movement of the RT;
-			\item The force is then reduced to the lowes acceptable level that still controls the postion 					of the TM;
-			\item TM relase is performed by means of a fast contraction of the linear piezo actuator,
-		        	wich also commands the retraction of the tips;
+			\item The force is then reduced to the lowest acceptable level that still controls the position of the TM;
+			\item TM release is performed by means of a fast contraction of the linear piezo actuator, which also commands the retraction of the tips;
 			\item The TM is capture by the drag-free attitude and control system and take finally to the 					nominal center of its housing;
 		\end{enumerate}
 	\end{itemize}	
-	We must pay attention to the fact that in presence od adhesion the
-	fast retraction may cause a momentum transfer from the RTs to TM. 
-	
+	We must pay attention to the fact that in presence of adhesion the
+	fast retraction may cause a momentum transfer from the RTs to the TM. 
 
 \subsubsection{The Physical System}
-
+    The GPRM can be physically modeled as the lumped-element diagram reported in Figure 2 :  
+    
+    	\begin{figure}[H]
+		\begin{centering}
+			\includegraphics[scale=0.4]{gfx/phys_model}
+		\end{centering}
+		\caption{GPRM Physical Model}
+	\end{figure}
+	
+	The diagram comprises the release tip mass and washer springs mounted at the extremity of the Grabbing Finger (GF) unit, and the piezo-stack actuator connected to a voltage generator through a discharge resistor R.
+	
 \subsubsection{The Mathematical Model}
+    A mathematical model for the lumped-element freshly shown can be easily derived by resorting to elementary physical laws, such as the Kirchoff laws and Newton's laws, once the constitutive equations of the piezo-stack actuator are known.
+    The most conventional model of a piezo-stack actuator is the one which relies on the linear constitutive equations of piezoelectric materials. \todo[inline]{inserire citazione paper} 
+    Such model however is not useful for describing the dynamics of piezo-actuated positioning mechanisms because it neglects the intrinsic dynamics of the actuator. 
+    A lumped parameter linear model for the piezo actuator can be obtained by manipulating the equations provided in \todo[inline]{inserire citazione paper isteresi} and by neglecting the hysteresis \todo[inline]{inserire citazione paper bortoluzzi 1} .\\
+    Using the Newton and Kirchoff's laws, together with the constitutive equations of the piezoelectric transducer, and by neglecting the degree of freedom describing the suspended mass of the piezo stack\todo[inline]{inserire citazione paper bortoluzzi 2} we can obtain the equations governing the simplified model of Fig. 2 :
+    \begin{equation}
+        RC_{a}\dot{q}(t)+q(t)-T_{em}x_{T}(t)=C_{a}E(t)
+    \end{equation}
+    
+    \begin{equation}
+        m\ddot{x}_{T}(t)+ b\dot{x}_{T}(t) + \left(k+\frac{T_{em}^{2}}{C_{a}}\right) x_{T}(t) - \frac{T_{em}}{C_{a}}q(t) = 0
+    \end{equation}
+    where :
+	\begin{itemize}
+		\item $E(t)$ is the input voltage
+		\item $q(t)$ is the charge accumulated on the piezo
+		\item $x_{T}(t)$ is the RT position
+		\item $C_{a}$ is the capacitance of the piezo stack
+		\item $T_{em}$ is the piezo effect
+		\item $m$ is the mass of the RT plus half of the mass of the piezo-stack
+		\item $b$ is the damping coefficient
+		\item $k$ is the stiffness coefficient
+	\end{itemize}
+    If the voltage $E$ and the test mass displacement $x_{T}$ are taken as the input and output variables of the system, then we can write the transfer function describing the dynamics of the GPRM as :
+    \todo[inline]{ricavare fdt sistema semplificato}
+    The system may be written in state space form
+    \todo[inline]{copiare equazioni agli stati}    
+    
+\section{Identification}
 
+    \listoftodos
 \end{document}
