@@ -10,6 +10,7 @@ clearvars
 close all
 clear 
 clc
+
 % preliminary data
 M = 1.9;            %TM mass in [kg]
 I = 6.9e-4;         %inertia [kg*m^2] w.r.t. any of the 3 axes
@@ -119,10 +120,9 @@ end
 
 stdev_p = 0.3*p;
 var_p = stdev_p.^2;
-s_p = (diag(1./var_p)+J'*r*J)\eye(7);       %covariance matrix
+s_p = (diag(1./var_p) + J'*r*J)\eye(7);     %covariance matrix
 st_p = sqrt(diag(s_p));                     %standard deviation on parameters
 
-% S
 %% Monte Carlo Simulation
 n = 1000;                      %number of simulations
 X_l = st_p.*randn(7,n) + p;    %random parameters generation for left hand tip
