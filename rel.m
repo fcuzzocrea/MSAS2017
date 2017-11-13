@@ -1,11 +1,12 @@
 % ODE function for tip release
 
-function dx = rel(t,x,par_l,par_r,M,Tlag_l,Tlag_r,xl0,xr0,X_el)
+function dx = rel(t,x,par_l,par_r,M,I,Tlag_l,Tlag_r,mis_l,mis_r,xl0,xr0,X_el)
 
 % state definition
 xl = x(1:3);
 xr = x(4:6);
 x_tm = x(7:8);
+x_ang = x(9);
 
 %% system of equations
 % adhesion force model
@@ -49,6 +50,6 @@ dxl = Al*xl + Bl*ul - [0;0;-1]*F_l;
 dxr = Ar*xr + Br*ur + [0;0;-1]*F_r;
 
 % test mass equations
-dx_tm = [0, 1; 0, 0]*x_tm + [0; 1/M]*(F_l-F_r);
-
-dx = [dxl;dxr;dx_tm];
+dx_tm = [0, 1; 0, 0]*x_tm + [0; 1/M]*(F_l - F_r);
+dx_ang = (mis_r*F_r - mis_l*F_l)/I;
+dx = [dxl;dxr;dx_tm;dx_ang];
