@@ -139,55 +139,63 @@ X_l = st_p.*randn(7,n) + pvec;     % Random parameters generation for left hand 
 X_r = st_p.*randn(7,n) + pvec;     % Random parameters generation for right hand tip
 Tlag_l = 3*rand(1,n)*1e-5;         % Random lag time (30 microseconds max)
 Tlag_r = 0;
-mis_l = 100*randn(1,n)*1e-6;       % Misalignment of left tip w.r.t. TM baricenter
-mis_r = 100*randn(1,n)*1e-6;       % Misalignment of right tip w.r.t. TM baricenter
-V_res = zeros(1,n);
+mis_l = 100*randn(1,n)*1e-6;       % Misalignment of left tip w.r.t. TM baricenter  % um
+mis_r = 100*randn(1,n)*1e-6;       % Misalignment of right tip w.r.t. TM baricenter % um
+V_res = zeros(1,n);                % Residual velocity
 W_res = zeros(1,n);
 h = waitbar(0,'Monte Carlo Simulation');
 
 for i = 1:n
     waitbar(i/n)
-    % determine initial conditions
+    
+    % Determine initial conditions
     [Al, Bl,~,~,~,~] = sys2(X_l(:,i), 0);
     [Ar, Br,~,~,~,~] = sys2(X_r(:,i), 0);
-    xl0 = Al\[-120/X_l(3,i);0;0.3];
+    xl0 = Al\[-120/X_l(3,i);0;0.3];             % Non manca 1/R ?
     xr0 = Ar\[-120/X_r(3,i);0;0.3];
     x0 = [xl0;xr0;0;0;0];
     
-    % perform simulation
+    % Perform simulation
     [t_s,x_s] = ode23(@(t,x) rel(t,x,X_l(:,i),X_r(:,i),M,I,Tlag_l(i),Tlag_r,mis_l(i),mis_r(i),xl0,xr0,X_el),[0,0.00015],x0);
-    % evaluate results
-    V_res(i) = x_s(end,8);  %residual linear velocity at each simulation
-    W_res(i) = x_s(end,9);  %residual angular velocity at each simulation
+    
+    % Evaluate results
+    V_res(i) = x_s(end,8);  % Residual linear velocity at each simulation
+    W_res(i) = x_s(end,9);  % Residual angular velocity at each simulation
 end
+
 close(h)
 
-% statistical analysis
-figure
+% Statistical analysis
+figure(4)
 h = histogram((V_res),'Normalization','Probability','NumBins',50);
-title('residual TM linear velocity PDF')
-xlabel('residual velocity [m/s]')
+title('Residual TM linear velocity PDF')
+xlabel('Residual velocity [m/s]')
 
-figure
+figure(5)
 k = histogram(abs(W_res),'Normalization','Probability','NumBins',50);
 
-% compute 3 sigma residual velocity
+% Compute 3 sigma residual velocity
 H = 0;
 i = 1;
+
 while H<0.997 && i<n
     H = H + h.Values(i);
     i = i + 1;
 end
-V_res_3s = h.BinEdges(i-1);         %3 sigma residual linear velocity
+
+V_res_3s = h.BinEdges(i-1);         % 3 sigma residual linear velocity
 
 K = 0;
 i = 1;
+
 while K<0.997 && i<n
     K = K + k.Values(i);
     i = i + 1;
 end
-W_res_3s = h.BinEdges(i-1);         %3 sigma residual angular velocity
-title('residual TM angular velocity PDF')
-xlabel('residual angular velocity [rad/s]')
+
+W_res_3s = h.BinEdges(i-1);         % 3 sigma residual angular velocity
+
+title('Residual TM angular velocity PDF')
+xlabel('Residual angular velocity [rad/s]')
 
 %% Simulation with noise evaluation

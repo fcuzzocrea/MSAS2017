@@ -1,6 +1,6 @@
 function [ dx ] = odefun(t,x,p)
 
-% parameters
+% Parameters
 C = p(1);               % Capacitance of the piezo stack
 Tem = p(2);             % To take in account the piezo effect
 R = p(3);               % Resistance of the electrical circuit
@@ -19,7 +19,7 @@ B = [1/R;              0;             0];
 T = 5e-6;
 
 % Input modeled as a step
-u = 60*(sign(t-T)+1);     % This returns -1 if t < 5e-6 otherwise +1
+u = 60*(sign(t-T)+1);     % This returns -1 if t < 5e-6 otherwise +1 % Volt
 
 % State space model
 dx = A*x+B*u;               
