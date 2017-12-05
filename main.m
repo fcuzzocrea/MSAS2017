@@ -1,136 +1,146 @@
 %{
-   Modeling and Simlation of Aerospace Systems, Fall 2017
+   MODELING AND SIMULATION OF AEROSPACE SYSTEMS, Fall 2017
+   (C) Collogrosso Alfonso, Cuzzocrea Francescodario, Mastrantuono Andrea
    Politecnico di Milano
+   WEB : https://github.com/fcuzzocrea/MSAS2017.git
 %}
-
-% Script files required to run main: sys2.m, odefun.m, rel.m
-% Workspace files required: adhesion_dataset_1.mat, responce_ref2.mat
 
 clearvars
 close all
 clear 
 clc
 
-% preliminary data
-M = 1.9;            %TM mass in [kg]
-I = 6.9e-4;         %inertia [kg*m^2] w.r.t. any of the 3 axes
+% Preliminary Datas
+M = 1.9;                % TM mass in [kg]
+I = 6.9e-4;             % Inertia [kg*m^2] w.r.t. any of the 3 axes
 
-%% identification
-% define system to identify
-par = [4.8e-7, 1.5, 400, 1e-3, 150, 1.5e7, 0];
-aux = {};           %estimation optional arguments
-T = 0;              %parameter to specify model as continous-time
+%% IDENTIFICATION
+
+% Define system to identify
+par =  [4.8e-7, 1.5, 400, 1e-3, 150, 1.5e7, 0]; % par = [Ca Tem R m b k V0]
+aux = {};                                       % Estimation optional arguments
+T = 0;                                          % Parameter to specify model as continous-time
 sys = idgrey('sys2',par,'c',aux,T);
 
-% set constraints on parameters
-sys.structure.Parameters.Minimum(1) = 0;    %min value for C
-sys.structure.Parameters.Minimum(2) = 0;    %min value for Tem
-sys.structure.Parameters.Minimum(3) = 100;  %min value for R
-sys.structure.Parameters.Minimum(4) = 1e-4; %  "   "    "  m
-sys.structure.Parameters.Minimum(5) = 100;  %  "   "    "  b
-sys.structure.Parameters.Minimum(6) = 0;    %  "   "    "  k
-sys.structure.Parameters.Minimum(7) = -0.05; %  "   "    "  V0
+% Set constraints on parameters
+sys.structure.Parameters.Minimum(1) = 0;        % min value for C
+sys.structure.Parameters.Minimum(2) = 0;        % min value for Tem
+sys.structure.Parameters.Minimum(3) = 100;      % min value for R
+sys.structure.Parameters.Minimum(4) = 1e-4;     % min value for m
+sys.structure.Parameters.Minimum(5) = 100;      % min value for b
+sys.structure.Parameters.Minimum(6) = 0;        % min value for k
+sys.structure.Parameters.Minimum(7) = -0.05;    % min value for V0
+sys.structure.Parameters.Maximum(1) = 1e-6;     % max value for C
+sys.structure.Parameters.Maximum(3) = 800;      % max value for R
+sys.structure.Parameters.Maximum(4) = 0.014;    % max value for m
+sys.structure.Parameters.Maximum(7) = 0.05;     % max value for V0
 
-sys.structure.Parameters.Maximum(1) = 1e-6; %max value for C
-sys.structure.Parameters.Maximum(3) = 800;  % "    "    "  R
-sys.structure.Parameters.Maximum(4) = 0.014;% "    "    "  m
-sys.structure.Parameters.Maximum(7) = 0.05;  % "    "    "  V0
 
-
-% load and resample data to fit in identification
-load('responce_ref2.mat')
+% Load and resample datas to fit in identification
+load('responce_ref2.mat');                              % Displacements in microm, time in micros
+ti = t_exp(1);
 tf = t_exp(end);
-ts = 1e-6;          %sampling time (f=1MHz)
-t_sim = t_exp(1):ts:tf;
+ts = 1e-6;                                              % Sampling time (f=1MHz)
+t_sim = ti:ts:tf;
 y_exp = interp1(t_exp,d_exp,t_sim,'linear');
-n = 4;              %lag time (in time samples)
-input = [zeros(1,n),120*ones(1,length(t_sim)-n)];
-data = iddata(y_exp',input',ts);
+n = 10;                                                       % Time lag (in time samples)
+input_voltage = 120;                                          % Volt
+input = [zeros(1,n),input_voltage*ones(1,length(t_sim)-n)];   % Input signal
+data = iddata(y_exp',input',ts);                              % Experimental response
 
-% identification
-opt = greyestOptions('SearchMethod','lm','InitialState','model','DisturbanceModel','none');
+% Identification
+opt = greyestOptions('InitialState','model','Display','on','SearchMethod','lm','DisturbanceModel','none');
 id_sys = pem(data,sys,opt);
+pvec = getpvec(id_sys);                                 % Parameters of the identified system
 
-p = getpvec(id_sys);
-
-% compare results to validate
-[A,B,C,~,~,x0] = sys2(p,0);
-figure
-subplot(2,1,1)
+% Compare results to validate
+[A,B,C,~,~,x0] = sys2(pvec,0);                          % Evaluate the system with estimated datas
+figure(1)
 opt = compareOptions('InitialCondition',x0);
 compare(data,id_sys,Inf,opt)
-title('experimental vs. model responce')
-ylabel('elongation [m]')
+title('Experimental response vs. Identified model response')
+xlabel('Time')
+ylabel('Elongation [m]')
 grid on
 
 
 %% Compute adhesion forces fitting
-% retrieve experimental data
+% Load experimental datas
 
-load('adhesion_dataset_1')  %load adhesion experimental data:
-                            %ydata = adhesion force
-                            %xdata = elongation
+load('adhesion_dataset_1')      % Load adhesion force experimental data:
+                                %
+                                % ydata = Force
+                                % xdata = Elongation
                             
-% data fitting
+% Data Fitting
 [X_el,sigma] = lsqcurvefit(@(x,xdata) x(1)*xdata.*exp(-x(2)*(xdata.^x(3))),ones(3,1),xdata,ydata);
 
 
 %% Simulation with parameters covariance matrix estimation
-% 
-% residuals computation
-[t_i,x_i] = ode113(@(t,x) odefun(t,x,p),t_sim,x0);
-y_i = C*x_i';           %modeled tip responce
-res = y_i - y_exp;               %model error w.r.t. experiment
-s_y = res*res'/length(res);      %variance of the residual 
-y_rms = sqrt(s_y);              %r.m.s. error
-subplot(2,1,2)
+
+% Residuals computation
+[t_i,x_i] = ode113(@(t,x)odefun(t,x,pvec),t_sim,x0);
+y_i = C*x_i';                       % Modeled tip responce
+res = y_i - y_exp;                  % Model error w.r.t. experiment
+s_y = res*res'/length(res);         % Variance of the residual 
+y_rms = sqrt(s_y);                  % R.M.S. error
+figure(2)
 plot(t_i,res)
 grid on
-title('residuals')
-xlabel('time [s]')
-ylabel('residual value [m]')
-r = diag(1./((res.^2)));
+hold on
+title('Residuals : $$ \varepsilon = y - \hat{y}$$','interpreter','latex')
+xlabel('Time [s]')
+ylabel('Residual value [m]')
+xL = xlim;
+line(xL, [y_rms y_rms]);  %x-axis
+str = '$$ \varepsilon_{RMS} = 1.3967e-07 $$';
+text(3*1e-4,y_rms+0.2*y_rms,str,'Interpreter','latex')
 
-% stability analysis
+% Stability Analysis
 l = eig(A);
-figure
+figure(3)
 plot(real(l),imag(l),'x')
 stiff = max(abs(real(l)))/min(abs(real(l)));
-title('eigenvalues location')
+title('Eigenvalues location')
 xlabel('Re')
 ylabel('Im')
 grid on
 
 % Jacobian estimation:
-% this estimation is performed by simulating the responce varing one
+% This estimation is performed by simulating the responce varing one
 % single parameter each time and comparing it with the nominal parameters
 % system responce
 
-J = zeros(length(y_i),length(p));
-dp = 0.01;
+J = zeros(length(y_i),length(pvec));
+dp = 0.01;                                  % ? Perchè ? 
 
-for i = 1:length(p)
-    p1 = p;
-    p1(i) = p(i)*(1+dp);
+for i = 1:length(pvec)
+    p1 = pvec;
+    p1(i) = pvec(i)*(1+dp);
     [~,~,C,~,~,x0] = sys2(p1,0);
     [T,X] = ode113(@(t,x) odefun(t,x,p1),t_sim,x0);
     y = C*X';
-    J(:,i) = (y-y_i)./(dp*p(i));
+    J(:,i) = (y-y_i)./(dp*pvec(i));
 end
+ 
+r = diag(1./((res.^2)));                    % Residual's matrix   
 
-stdev_p = 0.3*p;
-var_p = stdev_p.^2;
-s_p = (diag(1./var_p) + J'*r*J)\eye(7);     %covariance matrix
-st_p = sqrt(diag(s_p));                     %standard deviation on parameters
+stdev_p = 0.3*pvec;                         % A priori initial standard deviation  % ? Perchè ?
+var_p = stdev_p.^2;  
+s_p_0 = diag(1./var_p);                     % A priori covariance matrix
+s_p = ( s_p_0 + J'*r*J)\eye(7);             % Covariance matrix
+st_p = sqrt(diag(s_p));                     % Standard deviation on parameters
+
 
 %% Monte Carlo Simulation
-n = 1000;                      %number of simulations
-X_l = st_p.*randn(7,n) + p;    %random parameters generation for left hand tip
-X_r = st_p.*randn(7,n) + p;    %random parameters generation for right hand tip
-Tlag_l = 3*rand(1,n)*1e-5;     %random lag time (30 microseconds max)
+
+n = 1000;                          % Number of simulations
+X_l = st_p.*randn(7,n) + pvec;     % Random parameters generation for left hand tip
+X_r = st_p.*randn(7,n) + pvec;     % Random parameters generation for right hand tip
+Tlag_l = 3*rand(1,n)*1e-5;         % Random lag time (30 microseconds max)
 Tlag_r = 0;
-mis_l = 100*randn(1,n)*1e-6;    %misalignment of left tip w.r.t. TM baricenter
-mis_r = 100*randn(1,n)*1e-6;    %misalignment of right tip w.r.t. TM baricenter
+mis_l = 100*randn(1,n)*1e-6;       % Misalignment of left tip w.r.t. TM baricenter
+mis_r = 100*randn(1,n)*1e-6;       % Misalignment of right tip w.r.t. TM baricenter
 V_res = zeros(1,n);
 W_res = zeros(1,n);
 h = waitbar(0,'Monte Carlo Simulation');

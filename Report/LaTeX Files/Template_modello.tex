@@ -19,6 +19,7 @@
 \usepackage{float}
 \usepackage{enumitem}
 \usepackage{graphicx}
+\usepackage{titlesec}
 \usepackage{todonotes}
 \usepackage[unicode=true,
  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
@@ -51,6 +52,8 @@
 ]
 
 \pagenumbering{roman}
+
+\setcounter{secnumdepth}{3}
 
 \section{Introduction}
 	The LISA (Laser Interferometer Space Antenna) Pathfinder mission is a scientific mission aimed at revealing gravitational waves by means of the formation distortion of 3 \textit{Test Masses} (TMs), each one in a different spacecraft, put in a free-falling (geodesic) trajectory.\\
@@ -93,7 +96,7 @@
 		\item \textit{Displacemente Sensor} : to measure the axial force acting between the mechanism contacting interface;
 	\end{itemize}
 
-	\subsubsection{Main Task}
+	\subsubsection*{Main Task}
 	The model of the injection procedure consist of three parts.\\
 	The GPRM, the adhesion phenomenon and the TM motion equations.
 	Two opposite GPRMs are operated simultaneously in order to hold the
@@ -132,7 +135,7 @@
 	We must pay attention to the fact that in presence of adhesion the
 	fast retraction may cause a momentum transfer from the RTs to the TM. 
 
-\subsubsection{The Physical System}
+\subsection{The Physical System}
     The GPRM can be physically modeled as the lumped-element diagram reported in Figure 2 :  
     
     	\begin{figure}[H]
@@ -144,7 +147,7 @@
 	
 	The diagram comprises the release tip mass and washer springs mounted at the extremity of the Grabbing Finger (GF) unit, and the piezo-stack actuator connected to a voltage generator through a discharge resistor R.
 	
-\subsubsection{The Mathematical Model}
+\subsection{The Mathematical Model}
     A mathematical model for the lumped-element freshly shown can be easily derived by resorting to elementary physical laws, such as the Kirchoff laws and Newton's laws, once the constitutive equations of the piezo-stack actuator are known.
     The most conventional model of a piezo-stack actuator is the one which relies on the linear constitutive equations of piezoelectric materials. \todo[inline]{inserire citazione paper} 
     Such model however is not useful for describing the dynamics of piezo-actuated positioning mechanisms because it neglects the intrinsic dynamics of the actuator. 
@@ -169,10 +172,54 @@
 		\item $k$ is the stiffness coefficient
 	\end{itemize}
     If the voltage $E$ and the test mass displacement $x_{T}$ are taken as the input and output variables of the system, then we can write the transfer function describing the dynamics of the GPRM as :
-    \todo[inline]{ricavare fdt sistema semplificato}
-    The system may be written in state space form
-    \todo[inline]{copiare equazioni agli stati}    
-    
+    \begin{equation}
+        G(s) = \frac{X(s)}{E(s)} = \frac{b_{2}s^{2}+b_{1}s+b_{0}}{a_{5}s^{5}+a_{4}s^{4}+a_{3}s^{3}+a_{2}s^{2}+a_{1}s+a_{0}}
+    \end{equation} 
+    The system may be written in state space as\\
+    \begin{frame}
+        \footnotesize
+        \setlength{\arraycolsep}{2.5pt}
+        \medmuskip = 1mu
+        \thickmuskip = 1mu
+        \small\[\scriptstyle 
+        \left(\begin{array}{@{}c@{}}
+        \dot{q}_{T}(t)\\
+            \dot{x}_{T}(t)\\
+            \ddot{x}_{T}(t)
+            \end{array}\right)=\left[\begin{array}{@{}ccc@{}}
+            -\frac{1}{C_{a}R} & \frac{T_{em}}{C_{a}R} & 0\\
+            0 & 0 & 1\\
+            \frac{T_{em}}{C_{a}m} & -\frac{k}{m}-\frac{T_{em}^{2}}{C_{a}m} & -\frac{b}{m}
+            \end{array}\right]\left(\begin{array}{c}
+            q(t)\\
+            x_{T}(t)\\
+            \dot{x}_{T}(t)
+            \end{array}\right)+\left(\begin{array}{@{}c@{}}
+            \frac{1}{R}\\
+            0\\
+            0
+        \end{array}\right)E(t)
+              \]
+    \end{frame}
+
+    \begin{frame}
+        \footnotesize
+        \setlength{\arraycolsep}{2.5pt}
+        \medmuskip = 1mu
+        \thickmuskip = 1mu
+        \small\[\scriptstyle 
+            {y}(t) = 
+            \left[\begin{array}{@{}ccc@{}}
+            0 & 1 & 0\\
+            \end{array}\right]\left(\begin{array}{@{}c@{}}
+            q(t)\\
+            x_{T}(t)\\
+            \dot{x}_{T}(t)
+            \end{array}\right)
+                \]
+    \end{frame}
+    where the elements $A_{1,1}$, $A_{1,2}$, $A_{3,1}$, $A_{3,2}$, $A_{3,3}$, $B_{1}$ are unknown and must be identified.
+
 \section{Simulation}
 \subsection{Identification}
 

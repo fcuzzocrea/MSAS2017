@@ -5,10 +5,12 @@ _Files and scripts done for the assigments required for the course of Modeling a
 
 __Overview of contents:__
 
-* LISA Pathfinder
+* Identification
+* Montecarlo Simulation
 
 __How to use:__
-
+    
+   * Run main.m (scripts required:  sys2.m, odefun.m, rel.m, workspace files required : adhesion_dataset_1.mat, responce_ref2.mat)
 
 __Authors:__
 
