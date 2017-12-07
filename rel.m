@@ -1,6 +1,6 @@
 % ODE function for tip release
 
-function dx = rel(t,x,par_l,par_r,M,I,Tlag_l,Tlag_r,mis_l,mis_r,xl0,xr0,X_el,f_n)
+function dx = rel(t,x,par_l,par_r,M,I,Tlag_l,Tlag_r,mis_l,mis_r,xl0,xr0,X_el_l,X_el_r,f_n)
 
 % state definition
 xl = x(1:3);
@@ -19,10 +19,10 @@ ur = 120 - 60*(1+sign(t-Tlag_r));
 % force input definition
 %left hand tip
 if t-Tlag_l<1e-4
-    if e_l<3 && e_l>1e-7
-        F_l = -X_el(1)*e_l*exp(-X_el(2)*e_l^X_el(3));
-    elseif e_l<1e-7
-        F_l = min([-3e6*e_l+0.3,0.3]);
+    if e_l<3 && e_l>1e-4
+        F_l = -X_el_l(1)*e_l*exp(-X_el_l(2)*e_l^X_el_l(3));
+    elseif e_l<1e-4
+        F_l = min([-3e3*e_l+0.3,0.3]);
     else
         F_l = 0;
     end
@@ -31,15 +31,19 @@ else
 end
 %add noise force
 if t > Tlag_l
-    noise = ceil(length(f_n)*t/0.00015);
+    if f_n == 0
+        noise = 0;
+    else
+        noise = f_n(ceil(length(f_n)*t/0.00015));
+    end
 end
 
 % right hand tip
 if t - Tlag_r < 1e-4
-    if e_r < 3 && e_r > 1e-7
-        F_r = -X_el(1)*e_r*exp(-X_el(2)*e_r^X_el(3));
-    elseif e_r < 1e-7
-        F_r = min([-3e6*e_l+0.3,0.3]);
+    if e_r < 3 && e_r > 1e-4
+        F_r = -X_el_r(1)*e_r*exp(-X_el_r(2)*e_r^X_el_r(3));
+    elseif e_r < 1e-4
+        F_r = min([-3e3*e_l+0.3,0.3]);
     else
         F_r = 0;
     end

@@ -4,7 +4,7 @@
 %}
 
 % Script files required to run main: sys2.m, odefun.m, rel.m
-% Workspace files required: adhesion_dataset_1.mat, responce_ref2.mat
+% Workspace files required: adhesion.mat, responce_ref2.mat
 
 clearvars
 close all
@@ -67,16 +67,30 @@ grid on
 %% Compute adhesion forces fitting
 % retrieve experimental data
 
-load('adhesion_dataset_1')  %load adhesion experimental data:
+load('adhesion')            %load adhesion experimental data:
                             %ydata = adhesion force
                             %xdata = elongation
                             
 % data fitting
-[X_el,sigma] = lsqcurvefit(@(x,xdata) x(1)*xdata.*exp(-x(2)*(xdata.^x(3))),ones(3,1),xdata,ydata);
+X_adh     = zeros(3,3);     
+sigma_adh = zeros(3,3);     
+
+X     = zeros(5,3);         
+sigma = zeros(5,1);         
+
+for n = 1:3                     
+    for m = 1:5                 
+        [X(m,:), sigma(m)] = lsqcurvefit(@(x,xdata) x(1)*xdata...
+            .*exp(-x(2)*(xdata.^x(3))),ones(3,1),max(set(n).exp(m).el,zeros(size(set(n)...
+            .exp(m).el))),max(set(n).exp(m).F,zeros(size(set(n).exp(m).F))));
+    end
+    X_adh(n,:) = sum(X)/5;
+    sigma_adh(n,:) = sqrt(sum((X-X_adh(n,:)).^2)/4);
+end
 
 
 %% Simulation with parameters covariance matrix estimation
-% 
+ 
 % residuals computation
 [t_i,x_i] = ode113(@(t,x) odefun(t,x,p),t_sim,x0);
 y_i = C*x_i';                    %modeled tip responce
@@ -101,6 +115,7 @@ xlabel('Re')
 ylabel('Im')
 grid on
 
+
 % Jacobian estimation:
 % this estimation is performed by simulating the responce varing one
 % single parameter each time and comparing it with the nominal parameters
@@ -124,17 +139,50 @@ s_p = (diag(1./var_p) + J'*r*J)\eye(7);     %covariance matrix
 st_p = sqrt(diag(s_p));                     %standard deviation on parameters
 
 %% Monte Carlo Simulation
-n = 2000;                      %number of simulations
+n = 5000;                      %number of simulations
 X_l = st_p.*randn(7,n) + p;    %random parameters generation for left hand tip
 X_r = st_p.*randn(7,n) + p;    %random parameters generation for right hand tip
-Tlag_l = 3*rand(1,n)*1e-5;     %random lag time (30 microseconds max)
+max_lag_time = 3e-5;           %random lag time (30 microseconds max)
+Tlag_l = rand(1,n)*max_lag_time;
 Tlag_r = 0;
 mis_l = 100*randn(1,n)*1e-6;    %misalignment of left tip w.r.t. TM baricenter
 mis_r = 100*randn(1,n)*1e-6;    %misalignment of right tip w.r.t. TM baricenter
+
+X_el_l = X_adh(1,:) + randn(n,3).*sigma_adh(1,:);
+X_el_r = X_adh(1,:) + randn(n,3).*sigma_adh(1,:);
+
+% integrators testing
+[A, ~,~,~,~,~] = sys2(p, 0);    
+xt0 = A\[-120/p(3);0;0.3];
+x0 = [xt0;xt0;0;0;0];
+% ode23
+tic
+[T,X1] = ode23(@(t,x) rel(t,x,p,p,M,I,0,0,0,0,xt0,xt0,X_el_l(1,:),X_el_r(1,:),0),[0 0.0015],x0);
+cputime1 = toc;
+% ode23s
+tic
+[T,X2] = ode23s(@(t,x) rel(t,x,p,p,M,I,0,0,0,0,xt0,xt0,X_el_l(1,:),X_el_r(1,:),0),[0 0.0015],x0);
+cputime2 = toc;
+%ode23t
+tic
+[T,X3] = ode23t(@(t,x) rel(t,x,p,p,M,I,0,0,0,0,xt0,xt0,X_el_l(1,:),X_el_r(1,:),0),[0 0.0015],x0);
+cputime3 = toc;
+%ode23tb
+tic
+[T,X4] = ode23tb(@(t,x) rel(t,x,p,p,M,I,0,0,0,0,xt0,xt0,X_el_l(1,:),X_el_r(1,:),0),[0 0.0015],x0);
+cputime4 = toc;
+% print results
+
+  fprintf('ode23: \n     No. of time steps = %d, \t  CPUtime = %f \n',length(X1),cputime1)
+ fprintf('ode23s: \n     No. of time steps = %d, \t  CPUtime = %f \n',length(X2),cputime2)
+ fprintf('ode23t: \n     No. of time steps = %d, \t  CPUtime = %f \n',length(X3),cputime3)
+fprintf('ode23tb: \n     No. of time steps = %d, \t  CPUtime = %f \n',length(X3),cputime3)
+
+% initialize and perform simulation
 V_res = zeros(1,n);
 W_res = zeros(1,n);
 h = waitbar(0,'Monte Carlo Simulation');
-
+t_end = 0.00015;                %simulation end time
 for i = 1:n
     waitbar(i/n)
     % determine initial conditions
@@ -145,7 +193,7 @@ for i = 1:n
     x0 = [xl0;xr0;0;0;0];
     
     % perform simulation
-    [t_s,x_s] = ode23(@(t,x) rel(t,x,X_l(:,i),X_r(:,i),M,I,Tlag_l(i),Tlag_r,mis_l(i),mis_r(i),xl0,xr0,X_el,0),[0,0.00015],x0);
+    [t_s,x_s] = ode23t(@(t,x) rel(t,x,X_l(:,i),X_r(:,i),M,I,Tlag_l(i),Tlag_r,mis_l(i),mis_r(i),xl0,xr0,X_el_l(i,:),X_el_r(i,:),0),[0,t_end],x0);
     % evaluate results
     V_res(i) = x_s(end,8);  %residual linear velocity at each simulation
     W_res(i) = x_s(end,9);  %residual angular velocity at each simulation
@@ -154,7 +202,7 @@ close(h)
 
 % statistical analysis
 figure
-h = histogram((V_res),'Normalization','Probability','NumBins',50);
+h = histogram(abs(V_res),'Normalization','Probability','NumBins',50);
 title('residual TM linear velocity PDF')
 xlabel('residual velocity [m/s]')
 
@@ -191,7 +239,7 @@ fr = linspace(1,5e5,length(PSD));
 loglog(fr,real(PSD))
 title('post-fit residuals PSD')
 xlabel('Freq. [Hz]')
-ylabel('PSD [m^-6/sqrt(Hz)]')
+ylabel('PSD [m/sqrt(Hz)]')
 grid on
 
 % System FRF
@@ -205,8 +253,9 @@ k   = p(6);
 H =@(w) (R*c*1i*w + 1)./(k + b*1i*w - m*w.^2 + R*Tem^2*1i*w - R*b*c*w.^2 - R*c*m*1i*w.^3 + R*c*k*1i.*w);
 
 % introduce white noise
-N = fft(wgn(length(PSD_2sided),1,-20,'dbW'));
+N = fft(wgn(length(PSD_2sided),1,0,'dbW'));
 N = N(1:d)';
+
 % residual and force
 x = N.*PSD;
 F_n = x./H(fr);
@@ -227,6 +276,9 @@ title('simulated force in Fourier domain')
 X = ifft([x,x(end:-1:1)],'symmetric');
 figure
 plot(linspace(0,4e-4,length(X)),abs(X))
+title('simulated residual in time domain')
+xlabel('t [s]')
+ylabel('res [m]')
 
 % noise force in time domain
 f_n = ifft([F_n,F_n(end:-1:1)],'symmetric');        %force as function of time
@@ -238,13 +290,17 @@ ylabel('force [N]')
 grid on
 
 %% Montecarlo simulation: noise force approach
-Noise = wgn(length(PSD_2sided),n,-20,'dbW');    %white noise matrix
+Noise = wgn(length(PSD_2sided),n,0,'dbW');    %white noise matrix
 
 % initial conditions
 [A, B,~,~,~,~] = sys2(p, 0);
 xt0 = A\[-120/p(3);0;0.3];
 x0  = [xt0;xt0;0;0;0];
-Tlag_l = 3*rand(1,n)*1e-5;     %random lag time (30 microseconds max)
+Tlag_l = rand(1,n)*max_lag_time;     %random lag time (30 microseconds max)
+
+X_el_l = X_adh(1,:) + randn(n,3).*sigma_adh(1,:);       %adhesion parameters
+X_el_r = X_adh(1,:) + randn(n,3).*sigma_adh(1,:);
+
 V_res_noise = zeros(n,1);
 W_res_noise = zeros(n,1);
 
@@ -257,7 +313,7 @@ for i = 1:n
     X = N.*PSD;
     F_n = X./H(linspace(0,5e5,length(X)));
     f_n = ifft(F_n,'symmetric');
-    [t_s,x_s] = ode23(@(t,x) rel(t,x,p,p,M,I,Tlag_l(i),0,mis_l(i),mis_r(i),xt0,xt0,X_el,f_n),[0,0.00015],x0);
+    [t_s,x_s] = ode23t(@(t,x) rel(t,x,p,p,M,I,Tlag_l(i),0,mis_l(i),mis_r(i),xt0,xt0,X_el_l(i,:),X_el_r(i,:),f_n),[0,t_end],x0);
     V_res_noise(i) = x_s(end,8);
     W_res_noise(i) = x_s(end,9);
 end
@@ -269,6 +325,8 @@ plot(t_s,x_s(:,8))
 % compute 3 sigma residual velocity
 figure
 h = histogram(V_res_noise,'Normalization','Probability','NumBins',50);
+title('residual TM velocity PDF of noisy system')
+xlabel('residual velocity [m/s]')
 H = 0;
 i = 1;
 
@@ -281,6 +339,9 @@ V_res_noise_3s = h.BinEdges(i-1);         %3 sigma residual linear velocity
 %compute 3 sigma residual angular velocity
 figure
 k = histogram(abs(W_res_noise),'Normalization','Probability','NumBins',50);
+title('residual TM angular velocity PDF of noisy system')
+xlabel('residual angular velocity of noisy system [rad/s]')
+
 K = 0;
 i = 1;
 while K<0.997 && i<n
@@ -288,5 +349,3 @@ while K<0.997 && i<n
     i = i + 1;
 end
 W_res_noise_3s = h.BinEdges(i-1);         %3 sigma residual angular velocity
-title('residual TM angular velocity PDF of noisy system')
-xlabel('residual angular velocity of noisy system [rad/s]')
