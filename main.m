@@ -96,14 +96,33 @@ line(xL, [y_rms y_rms]);  %x-axis
 str = '$$ \varepsilon_{RMS} = 1.3967e-07 $$';
 text(3*1e-4,y_rms+0.2*y_rms,str,'Interpreter','latex')
 
+
 % Stability Analysis
 l = eig(A);
-figure(3)
-plot(real(l),imag(l),'x')
+plot(real(l),imag(l),'*')
 stiff = max(abs(real(l)))/min(abs(real(l)));
-title('Eigenvalues location')
+axis square
+grid on
 xlabel('Re')
 ylabel('Im')
+
+% Plot Runge-Kutta stability regions
+figure(3)
+load('chebfun');
+z = exp(1i*t);
+w = z-1;
+for i = 1:3
+  w = w-(1+w+.5*w.^2-z.^2)./(1+w);
+end
+plot(w)                                % order 2
+hold on
+for i = 1:4
+  w = w-(1+w+.5*w.^2+w.^3/6-z.^3)./(1+w+w.^2/2);
+end
+plot(w)                                % order 3
+t_step = 1.0000e-06;
+plot(real(l)*(t_step),imag(l)*(t_step),'*')
+axis([-5 2 -3.5 3.5])
 grid on
 
 % Jacobian estimation:
@@ -125,7 +144,7 @@ end
  
 r = diag(1./((res.^2)));                    % Residual's matrix   
 
-stdev_p = 0.3*pvec;                         % A priori initial standard deviation  % ? Perchè ?
+stdev_p = 0.3*pvec;                         % A priori initial standard deviation  % Assumed to be 1/3
 var_p = stdev_p.^2;  
 s_p_0 = diag(1./var_p);                     % A priori covariance matrix
 s_p = ( s_p_0 + J'*r*J)\eye(7);             % Covariance matrix

@@ -18,10 +18,10 @@ ur = 120 - 60*(1+sign(t-Tlag_r));             % Volt
 % Force input definition
 
 % Left hand tip
-if t-Tlag_l < 1e-4                                      % ??????????    
-    if e_l < 3 && e_l > 1e-7                            % ?????????? Ci vuole un 10^-6 ?
+if t-Tlag_l < 1e-4                                      
+    if e_l < 3 && e_l > 1e-7                           
         F_l = -X_el(1)*e_l*exp(-X_el(2)*e_l^X_el(3));
-    elseif e_l < 1e-7                                   % ??????????
+    elseif e_l < 1e-7                                 
         F_l = min([-3e6*e_l+0.3,0.3]);
     else
         F_l = 0;
