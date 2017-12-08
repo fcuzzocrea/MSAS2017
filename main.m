@@ -98,6 +98,7 @@ text(3*1e-4,y_rms+0.2*y_rms,str,'Interpreter','latex')
 
 
 % Stability Analysis
+figure(3)
 l = eig(A);
 plot(real(l),imag(l),'*')
 stiff = max(abs(real(l)))/min(abs(real(l)));
@@ -107,7 +108,7 @@ xlabel('Re')
 ylabel('Im')
 
 % Plot Runge-Kutta stability regions
-figure(3)
+figure(4)
 load('chebfun');
 z = exp(1i*t);
 w = z-1;
@@ -185,12 +186,12 @@ end
 close(h)
 
 % Statistical analysis
-figure(4)
+figure(5)
 h = histogram((V_res),'Normalization','Probability','NumBins',50);
 title('Residual TM linear velocity PDF')
 xlabel('Residual velocity [m/s]')
 
-figure(5)
+figure(6)
 k = histogram(abs(W_res),'Normalization','Probability','NumBins',50);
 
 % Compute 3 sigma residual velocity
