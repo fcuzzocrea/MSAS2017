@@ -15,55 +15,6 @@ clc
 M = 1.9;            %TM mass in [kg]
 I = 6.9e-4;         %inertia [kg*m^2] w.r.t. any of the 3 axes
 
-%% identification
-% define system to identify
-par = [4.8e-7, 1.5, 400, 1e-3, 150, 1.5e7, 0];
-aux = {};           %estimation optional arguments
-T = 0;              %parameter to specify model as continous-time
-sys = idgrey('sys2',par,'c',aux,T);
-
-% set constraints on parameters
-sys.structure.Parameters.Minimum(1) = 0;    %min value for C
-sys.structure.Parameters.Minimum(2) = 0;    %min value for Tem
-sys.structure.Parameters.Minimum(3) = 100;  %min value for R
-sys.structure.Parameters.Minimum(4) = 1e-4; %  "   "    "  m
-sys.structure.Parameters.Minimum(5) = 100;  %  "   "    "  b
-sys.structure.Parameters.Minimum(6) = 0;    %  "   "    "  k
-sys.structure.Parameters.Minimum(7) = -0.05; %  "   "    "  V0
-
-sys.structure.Parameters.Maximum(1) = 1e-6; %max value for C
-sys.structure.Parameters.Maximum(3) = 800;  % "    "    "  R
-sys.structure.Parameters.Maximum(4) = 0.014;% "    "    "  m
-sys.structure.Parameters.Maximum(7) = 0.05;  % "    "    "  V0
-
-
-% load and resample data to fit in identification
-load('responce_ref2.mat')
-tf = t_exp(end);
-ts = 1e-6;          %sampling time (f=1MHz)
-t_sim = t_exp(1):ts:tf;
-y_exp = interp1(t_exp,d_exp,t_sim,'linear');
-n = 4;              %lag time (in time samples)
-input = [zeros(1,n),120*ones(1,length(t_sim)-n)];
-data = iddata(y_exp',input',ts);
-
-% identification
-opt = greyestOptions('SearchMethod','lm','InitialState','model','DisturbanceModel','none');
-id_sys = pem(data,sys,opt);
-
-p = getpvec(id_sys);
-
-% compare results to validate
-[A,~,C,~,~,x0] = sys2(p,0);
-figure
-subplot(2,1,1)
-opt = compareOptions('InitialCondition',x0);
-compare(data,id_sys,Inf,opt)
-title('experimental vs. model responce')
-ylabel('elongation [m]')
-grid on
-
-
 %% Compute adhesion forces fitting
 % retrieve experimental data
 
@@ -87,6 +38,76 @@ for n = 1:3
     X_adh(n,:) = sum(X)/5;
     sigma_adh(n,:) = sqrt(sum((X-X_adh(n,:)).^2)/4);
 end
+%fitting plots
+%set 1
+l = linspace(0,3,100);
+figure
+plot(l*1e-6,X_adh(1,1)*l.*exp(-X_adh(1,2)*l.^(X_adh(1,3))),'r',set(1).exp(1).el*1e-6,set(1).exp(1).F,'.r',set(1).exp(2).el*1e-6,set(1).exp(2).F,'.r'...
+    ,set(1).exp(3).el*1e-6,set(1).exp(3).F,'.r',set(1).exp(4).el*1e-6,set(1).exp(4).F,'.r',set(1).exp(5).el*1e-6,set(1).exp(5).F,'.r')
+grid on
+hold on
+%set 2
+plot(l*1e-6,X_adh(2,1)*l.*exp(-X_adh(2,2)*l.^(X_adh(2,3))),'g',set(2).exp(1).el*1e-6,set(2).exp(1).F,'.g',set(2).exp(2).el*1e-6,set(2).exp(2).F,'.g'...
+    ,set(2).exp(3).el*1e-6,set(2).exp(3).F,'.g',set(2).exp(4).el*1e-6,set(2).exp(4).F,'.g',set(2).exp(5).el*1e-6,set(2).exp(5).F,'.g')
+%set 3
+plot(l*1e-6,X_adh(3,1)*l.*exp(-X_adh(3,2)*l.^(X_adh(3,3))),'b',set(3).exp(1).el*1e-6,set(3).exp(1).F,'.b',set(3).exp(2).el*1e-6,set(3).exp(2).F,'.b'...
+    ,set(3).exp(3).el*1e-6,set(3).exp(3).F,'.b',set(3).exp(4).el*1e-6,set(3).exp(4).F,'.b',set(3).exp(5).el*1e-6,set(3).exp(5).F,'.b')
+grid on
+title('Experimental and fitted data')
+xlabel('Elongation [m]')
+ylabel('Force [N]')
+axis([0 3e-6 0 0.16]);
+
+%% identification
+% define system to identify
+par = [4.8e-7, 1.5, 400, 1e-3, 150, 1.5e7, 0];
+aux = {};           %estimation optional arguments
+T = 0;              %parameter to specify model as continous-time
+sys = idgrey('sys2',par,'c',aux,T);
+
+% set constraints on parameters
+sys.structure.Parameters.Minimum(1) = 0;    %min value for C
+sys.structure.Parameters.Minimum(2) = 0;    %min value for Tem
+sys.structure.Parameters.Minimum(3) = 100;  %min value for R
+sys.structure.Parameters.Minimum(4) = 1e-4; %  "   "    "  m
+sys.structure.Parameters.Minimum(5) = 100;  %  "   "    "  b
+sys.structure.Parameters.Minimum(6) = 0;    %  "   "    "  k
+sys.structure.Parameters.Minimum(7) = -0.05;%  "   "    "  V0
+
+sys.structure.Parameters.Maximum(1) = 1e-6; %max value for C
+sys.structure.Parameters.Maximum(3) = 800;  % "    "    "  R
+sys.structure.Parameters.Maximum(4) = 0.014;% "    "    "  m
+sys.structure.Parameters.Maximum(7) = 0.05; % "    "    "  V0
+
+
+% load and resample data to fit in identification
+load('responce_ref2.mat')
+tf = t_exp(end);
+ts = 1e-6;          %sampling time (f=1MHz)
+t_sim = t_exp(1):ts:tf;
+y_exp = interp1(t_exp,d_exp,t_sim,'linear');
+n = 4;              %lag time (in time samples)
+input = [zeros(1,n),120*ones(1,length(t_sim)-n)];
+data = iddata(y_exp',input',ts);
+
+% identification
+opt = greyestOptions('SearchMethod','lm','InitialState','model','DisturbanceModel','none');
+id_sys = pem(data,sys,opt);
+
+p = getpvec(id_sys);
+
+% compare results to validate
+[A,~,C,~,~,x0] = sys2(p,0);
+figure
+subplot(2,1,1)
+opt = compareOptions('InitialCondition',x0);
+PEM = id_sys;
+compare(data,PEM,Inf,opt)
+legend('location','NorthWest')
+title('experimental vs. model responce')
+ylabel('elongation [m]')
+grid on
+
 
 
 %% Simulation with parameters covariance matrix estimation
@@ -101,7 +122,7 @@ subplot(2,1,2)
 plot(t_i,res)
 grid on
 title('residuals')
-xlabel('time [s]')
+xlabel('Time (seconds)')
 ylabel('residual value [m]')
 r = diag(1./((res.^2)));
 
@@ -139,7 +160,7 @@ s_p = (diag(1./var_p) + J'*r*J)\eye(7);     %covariance matrix
 st_p = sqrt(diag(s_p));                     %standard deviation on parameters
 
 %% Monte Carlo Simulation
-n = 5000;                      %number of simulations
+n = 2000;                      %number of simulations
 X_l = st_p.*randn(7,n) + p;    %random parameters generation for left hand tip
 X_r = st_p.*randn(7,n) + p;    %random parameters generation for right hand tip
 max_lag_time = 3e-5;           %random lag time (30 microseconds max)
@@ -152,31 +173,56 @@ X_el_l = X_adh(1,:) + randn(n,3).*sigma_adh(1,:);
 X_el_r = X_adh(1,:) + randn(n,3).*sigma_adh(1,:);
 
 % integrators testing
-[A, ~,~,~,~,~] = sys2(p, 0);    
-xt0 = A\[-120/p(3);0;0.3];
-x0 = [xt0;xt0;0;0;0];
-% ode23
-tic
-[T,X1] = ode23(@(t,x) rel(t,x,p,p,M,I,0,0,0,0,xt0,xt0,X_el_l(1,:),X_el_r(1,:),0),[0 0.0015],x0);
-cputime1 = toc;
-% ode23s
-tic
-[T,X2] = ode23s(@(t,x) rel(t,x,p,p,M,I,0,0,0,0,xt0,xt0,X_el_l(1,:),X_el_r(1,:),0),[0 0.0015],x0);
-cputime2 = toc;
-%ode23t
-tic
-[T,X3] = ode23t(@(t,x) rel(t,x,p,p,M,I,0,0,0,0,xt0,xt0,X_el_l(1,:),X_el_r(1,:),0),[0 0.0015],x0);
-cputime3 = toc;
-%ode23tb
-tic
-[T,X4] = ode23tb(@(t,x) rel(t,x,p,p,M,I,0,0,0,0,xt0,xt0,X_el_l(1,:),X_el_r(1,:),0),[0 0.0015],x0);
-cputime4 = toc;
-% print results
+cputime1 = zeros(1,200);
+cputime2 = zeros(1,200);
+cputime3 = zeros(1,200);
+cputime4 = zeros(1,200);
+h = waitbar(0,'integrators testing');
+for i = 1:200
+    waitbar(i/200)
+    [Al, ~,~,~,~,~] = sys2(X_l(:,i), 0);
+    [Ar, ~,~,~,~,~] = sys2(X_r(:,i), 0);
+    xt0_l = Al\[-120/X_l(3,i);0;0.3];
+    xt0_r = Ar\[-120/X_r(3,i);0;0.3];
+    x0 = [xt0_l;xt0_r;0;0;0];
 
-  fprintf('ode23: \n     No. of time steps = %d, \t  CPUtime = %f \n',length(X1),cputime1)
- fprintf('ode23s: \n     No. of time steps = %d, \t  CPUtime = %f \n',length(X2),cputime2)
- fprintf('ode23t: \n     No. of time steps = %d, \t  CPUtime = %f \n',length(X3),cputime3)
-fprintf('ode23tb: \n     No. of time steps = %d, \t  CPUtime = %f \n',length(X3),cputime3)
+% ode23
+    tic
+    [T,X1] = ode23(@(t,x) rel(t,x,X_l,X_r,M,I,Tlag_l(i),0,mis_l(i),mis_r(i),xt0_l,xt0_r,X_el_l(i,:),X_el_r(i,:),0),[0 0.0015],x0);
+    cputime1(i) = toc;
+    step1(i) = length(T);
+% ode23s
+    tic
+    [T,X2] = ode23s(@(t,x) rel(t,x,X_l,X_r,M,I,Tlag_l(i),0,mis_l(i),mis_r(i),xt0_l,xt0_r,X_el_l(i,:),X_el_r(i,:),0),[0 0.0015],x0);
+    cputime2(i) = toc;
+    step2(i) = length(T);
+%ode23t
+    tic
+    [T,X3] = ode23t(@(t,x) rel(t,x,X_l,X_r,M,I,Tlag_l(i),0,mis_l(i),mis_r(i),xt0_l,xt0_r,X_el_l(i,:),X_el_r(i,:),0),[0 0.0015],x0);
+    cputime3(i) = toc;
+    step3(i) = length(T);
+%ode23tb
+    tic
+    [T,X4] = ode23tb(@(t,x) rel(t,x,X_l,X_r,M,I,Tlag_l(i),0,mis_l(i),mis_r(i),xt0_l,xt0_r,X_el_l(i,:),X_el_r(i,:),0),[0 0.0015],x0);
+    cputime4(i) = toc;
+    step4(i) = length(T);
+end
+close(h)
+
+% print results
+cputime23     = sum(cputime1)/length(cputime1);
+cputime23s    = sum(cputime2)/length(cputime2);
+cputime23t    = sum(cputime3)/length(cputime3);
+cputime23tb   = sum(cputime4)/length(cputime4);
+timesteps23   = round(sum(step1)/length(step1));
+timesteps23s  = round(sum(step2)/length(step2));
+timesteps23t  = round(sum(step3)/length(step3));
+timesteps23tb = round(sum(step4)/length(step4));
+
+  fprintf('ode23: \n     No. of time steps (mean) = %d, \t  CPUtime = %f \n',timesteps23,cputime23)
+ fprintf('ode23s: \n     No. of time steps (mean) = %d, \t  CPUtime = %f \n',timesteps23s,cputime23s)
+ fprintf('ode23t: \n     No. of time steps (mean) = %d, \t  CPUtime = %f \n',timesteps23t,cputime23t)
+fprintf('ode23tb: \n     No. of time steps (mean) = %d, \t  CPUtime = %f \n',timesteps23tb,cputime23tb)
 
 % initialize and perform simulation
 V_res = zeros(1,n);
@@ -193,7 +239,7 @@ for i = 1:n
     x0 = [xl0;xr0;0;0;0];
     
     % perform simulation
-    [t_s,x_s] = ode23t(@(t,x) rel(t,x,X_l(:,i),X_r(:,i),M,I,Tlag_l(i),Tlag_r,mis_l(i),mis_r(i),xl0,xr0,X_el_l(i,:),X_el_r(i,:),0),[0,t_end],x0);
+    [t_s,x_s] = ode23(@(t,x) rel(t,x,X_l(:,i),X_r(:,i),M,I,Tlag_l(i),Tlag_r,mis_l(i),mis_r(i),xl0,xr0,X_el_l(i,:),X_el_r(i,:),0),[0,t_end],x0);
     % evaluate results
     V_res(i) = x_s(end,8);  %residual linear velocity at each simulation
     W_res(i) = x_s(end,9);  %residual angular velocity at each simulation
@@ -233,7 +279,7 @@ xlabel('residual angular velocity [rad/s]')
 C_rr= conv(res, res);
 PSD_2sided = fft(C_rr);
 d = ceil(length(PSD_2sided)/2);
-PSD = sqrt(PSD_2sided(1:d));
+PSD = sqrt(2*PSD_2sided(1:d));
 figure
 fr = linspace(1,5e5,length(PSD));
 loglog(fr,real(PSD))
@@ -262,16 +308,22 @@ F_n = x./H(fr);
 figure
 subplot(3,1,1)
 loglog(fr,abs(H(fr)))
+xlabel('frequency [Hz]')
+ylabel('|H|')
 grid on
 title('FRF')
 subplot(3,1,2)
 loglog(fr,abs(x))
 grid on
 title('simulated residual')
+ylabel('residual [m]')
+xlabel('frequency [Hz]')
 subplot(3,1,3)
 loglog(fr,abs(F_n))
+grid on
 title('simulated force in Fourier domain')
-
+ylabel('Force [N]')
+xlabel('frequency [Hz]')
 %residual in time domain
 X = ifft([x,x(end:-1:1)],'symmetric');
 figure
@@ -313,7 +365,7 @@ for i = 1:n
     X = N.*PSD;
     F_n = X./H(linspace(0,5e5,length(X)));
     f_n = ifft(F_n,'symmetric');
-    [t_s,x_s] = ode23t(@(t,x) rel(t,x,p,p,M,I,Tlag_l(i),0,mis_l(i),mis_r(i),xt0,xt0,X_el_l(i,:),X_el_r(i,:),f_n),[0,t_end],x0);
+    [t_s,x_s] = ode23(@(t,x) rel(t,x,p,p,M,I,Tlag_l(i),0,mis_l(i),mis_r(i),xt0,xt0,X_el_l(i,:),X_el_r(i,:),f_n),[0,t_end],x0);
     V_res_noise(i) = x_s(end,8);
     W_res_noise(i) = x_s(end,9);
 end
