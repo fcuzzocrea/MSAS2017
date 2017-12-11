@@ -21,8 +21,8 @@ ur = 120 - 60*(1+sign(t-Tlag_r));
 if t-Tlag_l<1e-4
     if e_l<3 && e_l>1e-4
         F_l = -X_el_l(1)*e_l*exp(-X_el_l(2)*e_l^X_el_l(3));
-    elseif e_l<1e-4
-        F_l = min([-3e3*e_l+0.3,0.3]);
+    elseif e_l<1e-3
+        F_l = min([-3e2*e_l+0.3,0.3]);
     else
         F_l = 0;
     end
@@ -42,8 +42,8 @@ end
 if t - Tlag_r < 1e-4
     if e_r < 3 && e_r > 1e-4
         F_r = -X_el_r(1)*e_r*exp(-X_el_r(2)*e_r^X_el_r(3));
-    elseif e_r < 1e-4
-        F_r = min([-3e3*e_l+0.3,0.3]);
+    elseif e_r < 1e-3
+        F_r = min([-3e2*e_l+0.3,0.3]);
     else
         F_r = 0;
     end

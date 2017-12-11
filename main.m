@@ -14,7 +14,7 @@ clc
 % preliminary data
 M = 1.9;            %TM mass in [kg]
 I = 6.9e-4;         %inertia [kg*m^2] w.r.t. any of the 3 axes
-
+rng('default')
 %% Compute adhesion forces fitting
 % retrieve experimental data
 
