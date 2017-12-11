@@ -173,17 +173,17 @@
 	\end{itemize}
     If the voltage $E$ and the test mass displacement $x_{T}$ are taken as the input and output variables of the system, then we can write the transfer function describing the dynamics of the GPRM as :
     \begin{equation}
-        G(s) = \frac{X(s)}{E(s)} = \frac{b_{2}s^{2}+b_{1}s+b_{0}}{a_{5}s^{5}+a_{4}s^{4}+a_{3}s^{3}+a_{2}s^{2}+a_{1}s+a_{0}}
+        G(s) = \frac{X(s)}{E(s)} = \frac{b_{2}s^{2}+b_{1}s+b_{0}}{a_{3}s^{3}+a_{2}s^{2}+a_{1}s+a_{0}}
     \end{equation} 
     The system may be written in state space as\\
     \begin{frame}
         \footnotesize
-        \setlength{\arraycolsep}{2.5pt}
-        \medmuskip = 1mu
-        \thickmuskip = 1mu
+        \setlength{\arraycolsep}{1.5pt}
+        \medmuskip = 0.8mu
+        \thickmuskip = 0.8mu
         \small\[\scriptstyle 
-        \left(\begin{array}{@{}c@{}}
-        \dot{q}_{T}(t)\\
+            \left(\begin{array}{@{}c@{}}
+            \dot{q}_{T}(t)\\
             \dot{x}_{T}(t)\\
             \ddot{x}_{T}(t)
             \end{array}\right)=\left[\begin{array}{@{}ccc@{}}
@@ -194,11 +194,13 @@
             q(t)\\
             x_{T}(t)\\
             \dot{x}_{T}(t)
-            \end{array}\right)+\left(\begin{array}{@{}c@{}}
-            \frac{1}{R}\\
-            0\\
-            0
-        \end{array}\right)E(t)
+            \end{array}\right)+\left(\begin{array}{@{}ccc@{}}
+            \frac{1}{R} & 0 \\
+            0 & 0 \\
+            0 & 1/m \\
+            \end{array}\right)\left(\begin{array}{@{}cc@{}}
+            E(t) & F(t) \\
+            \end{array}\right)
               \]
     \end{frame}
 
@@ -217,7 +219,7 @@
             \dot{x}_{T}(t)
             \end{array}\right)
                 \]
-    \end{frame}
+    \end{frame}\\
     where the elements $A_{1,1}$, $A_{1,2}$, $A_{3,1}$, $A_{3,2}$, $A_{3,3}$, $B_{1}$ are unknown and must be identified.
 
 \section{Simulation}

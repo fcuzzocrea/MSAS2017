@@ -51,7 +51,7 @@ data = iddata(y_exp',input',ts);                              % Experimental res
 % Identification
 opt = greyestOptions('InitialState','model','Display','on','SearchMethod','lm','DisturbanceModel','none');
 id_sys = pem(data,sys,opt);
-pvec = getpvec(id_sys);                                 % Parameters of the identified system
+p = getpvec(id_sys);                                    % Parameters of the identified system
 
 % Compare results to validate
 [A,B,C,~,~,x0] = sys2(pvec,0);                          % Evaluate the system with estimated datas
@@ -67,19 +67,32 @@ grid on
 %% Compute adhesion forces fitting
 % Load experimental datas
 
-load('adhesion_dataset_1')      % Load adhesion force experimental data:
-                                %
-                                % ydata = Force
-                                % xdata = Elongation
+load('adhesion')            %load adhesion experimental data:
+                            %ydata = adhesion force
+                            %xdata = elongation
                             
 % Data Fitting
-[X_el,sigma] = lsqcurvefit(@(x,xdata) x(1)*xdata.*exp(-x(2)*(xdata.^x(3))),ones(3,1),xdata,ydata);
+X_adh     = zeros(3,3);     
+sigma_adh = zeros(3,3);     
+
+X     = zeros(5,3);         
+sigma = zeros(5,1);         
+
+for n = 1:3                     
+    for m = 1:5                 
+        [X(m,:), sigma(m)] = lsqcurvefit(@(x,xdata) x(1)*xdata...
+            .*exp(-x(2)*(xdata.^x(3))),ones(3,1),max(set(n).exp(m).el,zeros(size(set(n)...
+            .exp(m).el))),max(set(n).exp(m).F,zeros(size(set(n).exp(m).F))));
+    end
+    X_adh(n,:) = sum(X)/5;
+    sigma_adh(n,:) = sqrt(sum((X-X_adh(n,:)).^2)/4);
+end
 
 
 %% Simulation with parameters covariance matrix estimation
 
 % Residuals computation
-[t_i,x_i] = ode113(@(t,x)odefun(t,x,pvec),t_sim,x0);
+[t_i,x_i] = ode113(@(t,x) odefun(t,x,p),t_sim,x0);
 y_i = C*x_i';                       % Modeled tip responce
 res = y_i - y_exp;                  % Model error w.r.t. experiment
 s_y = res*res'/length(res);         % Variance of the residual 
@@ -131,19 +144,19 @@ grid on
 % single parameter each time and comparing it with the nominal parameters
 % system responce
 
-J = zeros(length(y_i),length(pvec));
-dp = 0.01;                                  % ? Perchè ? 
+J = zeros(length(y_i),length(p));
+dp = 0.01;                                % ? Perchè ? 
 
-for i = 1:length(pvec)
-    p1 = pvec;
-    p1(i) = pvec(i)*(1+dp);
+for i = 1:length(p)
+    p1 = p;
+    p1(i) = p(i)*(1+dp);
     [~,~,C,~,~,x0] = sys2(p1,0);
     [T,X] = ode113(@(t,x) odefun(t,x,p1),t_sim,x0);
     y = C*X';
-    J(:,i) = (y-y_i)./(dp*pvec(i));
+    J(:,i) = (y-y_i)./(dp*p(i));
 end
  
-r = diag(1./((res.^2)));                    % Residual's matrix   
+r = diag(1./((res.^2)));                    % Residual's matrix, standard deviation not available
 
 stdev_p = 0.3*pvec;                         % A priori initial standard deviation  % Assumed to be 1/3
 var_p = stdev_p.^2;  
@@ -161,9 +174,47 @@ Tlag_l = 3*rand(1,n)*1e-5;         % Random lag time (30 microseconds max)
 Tlag_r = 0;
 mis_l = 100*randn(1,n)*1e-6;       % Misalignment of left tip w.r.t. TM baricenter  % um
 mis_r = 100*randn(1,n)*1e-6;       % Misalignment of right tip w.r.t. TM baricenter % um
+
+X_el_l = X_adh(1,:) + randn(n,3).*sigma_adh(1,:);
+X_el_r = X_adh(1,:) + randn(n,3).*sigma_adh(1,:);
+
+% Integrators testing
+[A, ~,~,~,~,~] = sys2(p, 0);    
+xt0 = A\[-120/p(3);0;0.3];
+x0 = [xt0;xt0;0;0;0];
+
+% ODE23
+tic
+[T,X1] = ode23(@(t,x) rel(t,x,p,p,M,I,0,0,0,0,xt0,xt0,X_el_l(1,:),X_el_r(1,:),0),[0 0.0015],x0);
+cputime1 = toc;
+
+% ODE23s
+tic
+[T,X2] = ode23s(@(t,x) rel(t,x,p,p,M,I,0,0,0,0,xt0,xt0,X_el_l(1,:),X_el_r(1,:),0),[0 0.0015],x0);
+cputime2 = toc;
+
+% ODE23t
+tic
+[T,X3] = ode23t(@(t,x) rel(t,x,p,p,M,I,0,0,0,0,xt0,xt0,X_el_l(1,:),X_el_r(1,:),0),[0 0.0015],x0);
+cputime3 = toc;
+
+% ODE23tb
+tic
+[T,X4] = ode23tb(@(t,x) rel(t,x,p,p,M,I,0,0,0,0,xt0,xt0,X_el_l(1,:),X_el_r(1,:),0),[0 0.0015],x0);
+cputime4 = toc;
+
+fprintf('ode23: \n     No. of time steps = %d, \t  CPUtime = %f \n',length(X1),cputime1)
+fprintf('ode23s: \n    No. of time steps = %d, \t  CPUtime = %f \n',length(X2),cputime2)
+fprintf('ode23t: \n    No. of time steps = %d, \t  CPUtime = %f \n',length(X3),cputime3)
+fprintf('ode23tb: \n   No. of time steps = %d, \t  CPUtime = %f \n',length(X3),cputime3)
+
+% Initialize and perform simulation
+
 V_res = zeros(1,n);                % Residual velocity
 W_res = zeros(1,n);
 h = waitbar(0,'Monte Carlo Simulation');
+
+t_end = 0.00015;                    % Simulation end time
 
 for i = 1:n
     waitbar(i/n)
@@ -171,16 +222,16 @@ for i = 1:n
     % Determine initial conditions
     [Al, Bl,~,~,~,~] = sys2(X_l(:,i), 0);
     [Ar, Br,~,~,~,~] = sys2(X_r(:,i), 0);
-    xl0 = Al\[-120/X_l(3,i);0;0.3];             % Non manca 1/R ?
+    xl0 = Al\[-120/X_l(3,i);0;0.3];
     xr0 = Ar\[-120/X_r(3,i);0;0.3];
     x0 = [xl0;xr0;0;0;0];
     
     % Perform simulation
-    [t_s,x_s] = ode23(@(t,x) rel(t,x,X_l(:,i),X_r(:,i),M,I,Tlag_l(i),Tlag_r,mis_l(i),mis_r(i),xl0,xr0,X_el),[0,0.00015],x0);
+    [t_s,x_s] = ode23t(@(t,x) rel(t,x,X_l(:,i),X_r(:,i),M,I,Tlag_l(i),Tlag_r,mis_l(i),mis_r(i),xl0,xr0,X_el_l(i,:),X_el_r(i,:),0),[0,t_end],x0);
     
     % Evaluate results
-    V_res(i) = x_s(end,8);  % Residual linear velocity at each simulation
-    W_res(i) = x_s(end,9);  % Residual angular velocity at each simulation
+    V_res(i) = x_s(end,8);  %residual linear velocity at each simulation
+    W_res(i) = x_s(end,9);  %residual angular velocity at each simulation
 end
 
 close(h)
