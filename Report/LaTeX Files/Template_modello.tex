@@ -21,6 +21,7 @@
 \usepackage{graphicx}
 \usepackage{titlesec}
 \usepackage{todonotes}
+\usepackage{empheq}
 \usepackage[unicode=true,
  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
  breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
@@ -224,237 +225,230 @@
             \dot{x}_{T}(t)
             \end{array}\right)
                 \]
-    \end{frame}\\
-    
-  where the elements $A_{1,1}$, $A_{1,2}$, $A_{3,1}$, $A_{3,2}$, $A_{3,3}$, $B_{1}$ are unknown and will be estimated in identification (Sec 3.1).
-  \subsubsection{Test mass model}
-  %
- TM is easily modeled as a rigid body in free motion, Newton's equations describe linear displacement dynamics
- \begin{align*}
- M\uline{\ddot{x}}_{TM} &= \uline{F}
- %M\ddot{y}_{TM} &= F_y\\
- %M\ddot{z}_{TM} &= F_z
- \end{align*} 
- while Euler's equations
- \begin{align*}
- \uuline{J}\uline{\dot{\omega}}+\uuline{J}\uline{\omega}\times\uline{\omega}=\uline{M}
- \end{align*}
- can be simplified in this case since inertia moment I is the same for each of the 3 principal axes ($J_{i,j} =I \delta_{i,j}$) and describe angular dynamics
- \begin{align*}
- I\uline{\dot{\omega}}&=\uline{M}
- \end{align*}
- To complete the model, a set of kinematic equations for angular motion shall be considered
- \begin{equation*}
- \uuline{\dot{A}}+\big[\uuline{\omega}^{\wedge}\big]\uuline{A} =0
- \end{equation*}
- This last equation can be substituted by different models i.e. Euler Angles kinematic equations that can be more suitable. A simplified model have been derived considering system simmetry. Force components on y and z axes arise due to TM rotation. Angular velocity is expected to be of the order of few $\mu rad/s$, the contact between TM and RTs lasts much less than $1 ms$, as a result rotation angle is a fraction of $nrad$ and is neglected. Rotation arises for a modeled misalignment on y-axis only. So the linear dynamics as well as the rotational ones occur on one axis only. Therefore System is widely symplified:
- \begin{align}
- &M\ddot{x_T}=F\\ 	
- &I\dot{\omega}=M\\ 
- &\dot{\theta}=\omega
- \end{align}
-  \subsubsection{Adhesion force model}
-  \begin{table*}
-  \setlength{\tabcolsep}{0.35 cm}
-  \renewcommand{\arraystretch}{1.2}
-  \begin{tabular}{c| c c|c c|c c }
-  \textbf{Coefficient} & \multicolumn{2}{c|}{\textbf{set 1}}&\multicolumn{2}{c|}{\textbf{set 2}}& \multicolumn{2}{c}{\textbf{set 3}}\\
-  &mean value & std.dev. & mean value & std.dev. &mean value & std.dev. \\ \hline
-  $X_1$& $0.50$&$2.59 \times 10^{-2}$ & $ 0.357$ & $ 7.30 \times 10^{-2}$ &$0.457$ & $3.58 \times 10^{-2}$\\
-  $X_2$ & $2.89$ & $2.75 \times 10^{-1}$ & $1.32$ & $1.59\times 10^{-1}$ & $1.73$ & $1.22\times 10^{-1}$\\
-  $X_3$ & $2.36$ & $4.76\times 10^{-2}$ & $2.07$ & $2.14 \times 10^{-1}$ & $1.27$ & $2.98 \times 10^{-1}$\\
-  \end{tabular}
-  \caption{adhesion force fitting results}
-  \end{table*}
-  The following description of the adhesion force competes the model. A dynamic model for tip actuation and TM motion has been derived and it includes a parametric representation of force acting on tip and which is an input of the system. The description of adhesion force starts with experimental data shown in Fig. 3, that presents several experimental measurments for 3 different sets. 
-\begin{figure}[t]
-		\begin{centering}
+    \end{frame}\\    
+    where the elements $A_{1,1}$, $A_{1,2}$, $A_{3,1}$, $A_{3,2}$, $A_{3,3}$, $B_{1}$ are unknown and will be estimated in identification (Sec 3.1).
+    \subsubsection{Test mass model}  
+    TM is easily modeled as a rigid body in free motion, Newton's equations describe linear displacement dynamics
+    \begin{align*}
+        M\uline{\ddot{x}}_{TM} &= \uline{F}
+        %M\ddot{y}_{TM} &= F_y\\
+        %M\ddot{z}_{TM} &= F_z
+    \end{align*} 
+    while Euler's equations
+    \begin{align*}
+        \uuline{J}\uline{\dot{\omega}}+\uuline{J}\uline{\omega}\times\uline{\omega}=\uline{M}
+    \end{align*}
+    can be simplified in this case since inertia moment I is the same for each of the 3 principal axes ($J_{i,j} =I \delta_{i,j}$) and describe angular dynamics
+    \begin{align*}
+        I\uline{\dot{\omega}}&=\uline{M}
+    \end{align*}
+    To complete the model, a set of kinematic equations for angular motion shall be considered
+    \begin{equation*}
+        \uuline{\dot{A}}+\big[\uuline{\omega}^{\wedge}\big]\uuline{A} =0
+    \end{equation*}
+    This last equation can be substituted by different models i.e. Euler Angles kinematic equations that can be more suitable. A simplified model have been derived considering system simmetry. Force components on y and z axes arise due to TM rotation. Angular velocity is expected to be of the order of few $\mu rad/s$, the contact between TM and RTs lasts much less than $1 ms$, as a result rotation angle is a fraction of $nrad$ and is neglected. Rotation arises for a modeled misalignment on y-axis only. So the linear dynamics as well as the rotational ones occur on one axis only. Therefore the system is widely simplified:
+    \begin{empheq}[left = \empheqlbrace]{align}
+        &M\ddot{x_T}=F\\ 	
+        &I\dot{\omega}=M\\ 
+        &\dot{\theta}=\omega
+    \end{empheq}
+    \subsubsection{Adhesion force model}
+        \begin{table*}
+        \setlength{\tabcolsep}{0.35 cm}
+        \renewcommand{\arraystretch}{1.2}
+        \begin{tabular}{c| c c|c c|c c }
+        \textbf{Coefficient} & \multicolumn{2}{c|}{\textbf{set 1}}&\multicolumn{2}{c|}{\textbf{set 2}}& \multicolumn{2}{c}{\textbf{set 3}}\\
+            &mean value & std.dev. & mean value & std.dev. &mean value & std.dev. \\ \hline
+            $X_1$& $0.50$&$2.59 \times 10^{-2}$ & $ 0.357$ & $ 7.30 \times 10^{-2}$ &$0.457$ & $3.58 \times 10^{-2}$\\
+            $X_2$ & $2.89$ & $2.75 \times 10^{-1}$ & $1.32$ & $1.59\times 10^{-1}$ & $1.73$ & $1.22\times 10^{-1}$\\
+            $X_3$ & $2.36$ & $4.76\times 10^{-2}$ & $2.07$ & $2.14 \times 10^{-1}$ & $1.27$ & $2.98 \times 10^{-1}$\\
+        \end{tabular}
+            \caption{adhesion force fitting results}
+        \end{table*}
+    The following description of the adhesion force competes the model. A dynamic model for tip actuation and TM motion has been derived and it includes a parametric representation of force acting on tip and which is an input of the system. The description of adhesion force starts with experimental data shown in Fig. 3, that presents several experimental measurments for 3 different sets. 
+    \begin{figure}[t]
+        \begin{centering}
 			\includegraphics[scale=0.6]{gfx/adh_data}
 		\end{centering}
-		\caption{Adhesion force experimental data (from Bortoluzzi et al. 2012)}
-	\end{figure}
-Following the procedure adopted by Bortoluzzi  \todo[inline]{inserire citazione paper bortoluzzi 2}, once experimental data are sampled from Fig.3, they are fitted into exponential model:\\
-\begin{equation*}
-  F_{ad}(\Delta l)=X_1\Delta l e^{X_2\Delta l^{X_3}} \\
-  \end{equation*}
-The MATLAB \textbf{lsqcurvefitting} routine is then used to perform a least square minimization fitting of the experimental data. Resulting $X_1,X_2,X_3$ coefficients and their standard deviations are listed in table 2.
-\begin{figure}[t]
+            \caption{Adhesion force experimental data (from Bortoluzzi et al. 2012)}
+        \end{figure}
+    Following the procedure adopted by Bortoluzzi  \todo[inline]{inserire citazione paper bortoluzzi 2}, once experimental data are sampled from Fig.3, they are fitted into exponential model:\\
+    \begin{equation*}
+        F_{ad}(\Delta l)=X_1\Delta l e^{X_2\Delta l^{X_3}} \\
+    \end{equation*}
+    The MATLAB \textbf{lsqcurvefitting} routine is then used to perform a least square minimization fitting of the experimental data. Resulting $X_1,X_2,X_3$ coefficients and their standard deviations are listed in table 2.
+    \begin{figure}[t]
 		\begin{centering}
 			\includegraphics[scale=0.6]{gfx/adh_all}
-			
 		\end{centering}
-		\caption{Adhesion force sampled data and fittings}
-\end{figure}
-\subsubsection{Contact force model and preload}
-
+            \caption{Adhesion force sampled data and fittings}
+    \end{figure}
+    \subsubsection{Contact force model and preload}
+    
 \section{Simulation}
 \begin{table*}[t]
-\setlength{\tabcolsep}{0.5 cm}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{|c |c c c c c|}\hline
-parameter & guessed value & lower bound & upper bound & identified value & unit \\ \hline
-$C_a$ & $4.8\times 10^{-7}$ & 0 & $10^{-6}$ & $3.936 \times 10^{-7}$ & F \\
-$T_{em}$ & $1.5$ & 0 & - & $1.51$ & $\sqrt{\nicefrac{FN}{m}}$ \\
-R & 400 & 100 & 800 &417 & $\Omega$\\
-m & $10^{-3}$ & $10^{-4}$ &0.014 & $10^{-4} $ & kg\\
-b & 150 & 100 & - & 100 & $\nicefrac{Ns}{m}$ \\
-k & $1.5 \times 10^7$ & 0 & - & $1.5 \times 10^7$ & $\nicefrac{m}{s}$\\
-$V_0$ & 0 & -0.05 & 0.05 & $3 \times 10^{-3}$ & $\nicefrac{m}{s}$ \\ \hline
-\end{tabular}
-\caption{Identification inputs and results}
+    \setlength{\tabcolsep}{0.5 cm}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c |c c c c c|}\hline
+    parameter & guessed value & lower bound & upper bound & identified value & unit \\ \hline
+    $C_a$ & $4.8\times 10^{-7}$ & 0 & $10^{-6}$ & $3.936 \times 10^{-7}$ & F \\
+    $T_{em}$ & $1.5$ & 0 & - & $1.51$ & $\sqrt{\nicefrac{FN}{m}}$ \\
+    R & 400 & 100 & 800 &417 & $\Omega$\\
+    m & $10^{-3}$ & $10^{-4}$ &0.014 & $10^{-4} $ & kg\\
+    b & 150 & 100 & - & 100 & $\nicefrac{Ns}{m}$ \\
+    k & $1.5 \times 10^7$ & 0 & - & $1.5 \times 10^7$ & $\nicefrac{m}{s}$\\
+    $V_0$ & 0 & -0.05 & 0.05 & $3 \times 10^{-3}$ & $\nicefrac{m}{s}$ \\ \hline
+    \end{tabular}
+        \caption{Identification inputs and results}
 \end{table*}
-\subsection{Identification}
-Identification makes use of experimental data to estimate unknown parameters of the model. Experimental data are extrapolated from \todo[inline]{inserire citazione paper bortoluzzi 2} and are resampled with a 1MHz frequency to be consistent with the cited paper data. 
-The parameters to be identified are the six physical constants that appear nonlinearly in RT linear system, the $V_0$ initial velocity of the RT parametrized as: \\
-\\
-\begin{centering}
-$
-\begin{pmatrix}
-q(0) \\
-x_T(0) \\
-\dot{x}_T(0)
-\end{pmatrix}
-=
-\begin{pmatrix}
-0 \\
-0 \\
-V_0
-\end{pmatrix}
-$
-\end{centering}
-\\
-\\
-Therefore, the vector of parameters to be estimeted is defined as:\\
-\\
-\begin{centering}
-$\textbf{p} = 
-\begin{bmatrix}
-C_a \\
-T_{em} \\
-R \\
-m \\
-b \\
-k \\
-V_0
-\end{bmatrix}
-$
-\end{centering}
-\\
-\\
-Identification consists in minimaze the variance of the residual between measured and modeled responce:\\
-\\
-$ \textbf{p}=argmin(\psi_N(\textbf{p}))$\\
-\\
-with penalty function $\psi_N$ defined as:\\
-\\
-$\psi_N(\textbf{p})=\frac{1}{N}\sum\limits_{i=1}^N(y_N(t_i)-y(t_i|\textbf{p}))^2$\\
-where $y_N$ is the experimental responce and $y(t_i|\textbf{p})$ is the modeled responce with parameter set \textbf{p}.\\
-Identification is performed with MATLAB \textbf{pem} command using the Levenberg-Marquardt search method. Due to non linearity of the problem many local minima can be found and  in order to have the routine converging to a solution with physical meaning appropriate initial guess for \textbf{p} must be set, as well as suitable constrains (i.e. a lower bound to avoid physical parameters converging to a negative value). \\
-\begin{figure}
-		\begin{centering}
-			\includegraphics[scale=0.6]{gfx/Identification_results}
-		\end{centering}
-		\caption{Comparison between modeled and experimental responce}
-\end{figure}
-Estimated parameters are reported in Table 3. Figure 4 shows the comparison between experimental and identified model responce. Residuals are small, always <1\% of max. tip retraction, their RMS is $x_{T,rms}=84 nm$.\\
+    \subsection{Identification}
+        Identification makes use of experimental data to estimate unknown parameters of the model. Experimental data are extrapolated from \todo[inline]{inserire citazione paper bortoluzzi 2} and are resampled with a 1MHz frequency to be consistent with the cited paper data. 
+        The parameters to be identified are the six physical constants that appear nonlinearly in RT linear system, the $V_0$ initial velocity of the RT parametrized as: \\
+    \\
+    \begin{centering}
+    $
+        \begin{pmatrix}
+            q(0) \\
+            x_T(0) \\
+            \dot{x}_T(0)
+        \end{pmatrix}
+    =
+    \begin{pmatrix}
+        0 \\
+        0 \\
+        V_0
+    \end{pmatrix}
+    $
+    \end{centering}
+    \\
+    \\
+    Therefore, the vector of parameters to be estimeted is defined as:\\
+    \\
+    \begin{centering}
+        $\textbf{p} = 
+        \begin{bmatrix}
+            C_a \\
+            T_{em} \\
+            R \\
+            m \\
+            b \\
+            k \\
+            V_0
+    \end{bmatrix}
+    $
+    \end{centering}
+    \\
+    \\
+    Identification consists in minimaze the variance of the residual between measured and modeled responce:\\
+    \\
+    $ \textbf{p}=argmin(\psi_N(\textbf{p}))$\\
+    \\
+    with penalty function $\psi_N$ defined as:\\
+    \\
+    $\psi_N(\textbf{p})=\frac{1}{N}\sum\limits_{i=1}^N(y_N(t_i)-y(t_i|\textbf{p}))^2$\\
+    where $y_N$ is the experimental responce and $y(t_i|\textbf{p})$ is the modeled responce with parameter set \textbf{p}.\\
+    Identification is performed with MATLAB \textbf{pem} command using the Levenberg-Marquardt search method. Due to non linearity of the problem many local minima can be found and  in order to have the routine converging to a solution with physical meaning appropriate initial guess for \textbf{p} must be set, as well as suitable constrains (i.e. a lower bound to avoid physical parameters converging to a negative value). \\
+    \begin{figure}
+            \begin{centering}
+                \includegraphics[scale=0.6]{gfx/Identification_results}
+            \end{centering}
+                \caption{Comparison between modeled and experimental responce}
+    \end{figure}
+    Estimated parameters are reported in Table 3. Figure 4 shows the comparison between experimental and identified model responce. Residuals are small, always <1\% of max. tip retraction, their RMS is $x_{T,rms}=84 nm$.\\
 
-\subsection{Monte Carlo simulation}
-In Sec. 3.1 nominal values of tip actuation mechanism parameters have been estimated. However some deviation of the actual mechanism from the nominal one may occur. The simulation is performed through a Monte-Carlo approach: the simulation of the release phase is repeated many times changing the model of the mechanism. The results of this procedure will be the \textit{Probability Density Function} of some relevant quantities
-\subsubsection{Parameters uncertainty}
-Two approaches are followed to include parameters uncertainty into the simulation.\\
-The first one consists in letting each parameter assume in each simulation a random value with a suitable probability distribution. A covariance matrix is computed with the formula:\\
-\begin{equation*}
-\Sigma_p=\big(J^T\Sigma_x^{-1}J\big)^{-1}
-\end{equation*}
-where J is the jacobian. Being $x_i$ the retraction at i-th time step and $p_j$ the j-th parameter, J is defined as:\\
-\begin{equation*}
-J_{ij}=\frac{\partial x_i}{\partial p_j}\\
-\end{equation*}
-Jacobian is estimated by performing simulations of the nominal mechanism and of the mechanism with a parameter shifted from nominal one with an high order integrator (\textit{ode113} was adopted for this purpose) and then comparing the responces. Being $res_i$ the residual at i-th time step, $\Sigma_x$ is built as:
-\begin{equation*}
-\Sigma_x = 
-\begin{pmatrix}
-res_1^2& 0 & \cdots & 0\\
-0 & res_2^2 & \cdots & 0\\
-\vdots & \vdots & \ddots & \vdots \\
-0 & 0 & \cdots & res_N^2
-\end{pmatrix}
-\end{equation*}\\
-A final form for covariance matrix accounts both for identification and \textit{a priori} uncertainties, here quantified as standard deviation $\sigma_0=0.3\times p$ for each parameter. Being $\Sigma_{p,0}^-1$ the a priori covariance matrix, covariance matrix is then defined as:
-\begin{equation*}
-\Sigma_p=\big(\Sigma_{p,0}^{-1}+J^T\Sigma_x^{-1}J\big)^{-1}
-\end{equation*}\\
-Eventually no correlation is assumed, so off-diagonal elements are ignored.\\
-The main issue with this approach is the inversion of left hand side of equation \todo[inline]{put previous equation number}, which may yield inaccurate results. In this case, although high conditioning number, results appear consistent. The second approach consists in altering the tip retraction dynamics by a fotce F(t) applied on the tip which generates a displacement with same \textit{Power Spectral Density} (PSD) as the residual. The procedure is depicted in the main steps as follows:
-
-\begin{align*}
-res& & &\text{residuals}\\ 
-&\Downarrow \\
-C_{res,res}&=res \ast res & &\text{auto correlation}\\ 
-&\Downarrow \\ 
-PSD_{2-sided}&=fft(C_{res,res}) & &\text{Fourier transform}\\
-&\Downarrow \\
-PSD\times n_w(j\omega)&=res_{rand} &&\text{white noise filtering}\\
-&\Downarrow \\
-F_{rand}(j\omega)&=\frac{res_{rand}}{H(j\omega)} &&\text{force in Fourier domain}\\
-&\Downarrow\\
-F_{rand}(t)&=ifft(F_{rand}(j\omega)) &&\text{force in time domain}
-\end{align*}
-Residual auto-correletion is transformed into Fourier domain to get the PSD, shown in \todo[inline]{inserire numero figura PSD}. Then a white noise, in frequency domain too, is filtered through the PSD. The filtered noise is a simulated random displacement, in order to use it in the simulation, it must pass through the \textit{Frequency Responce Function} (FRF), here called $H(j\omega)$, whose expression is stated below:
-\begin{equation*}
-H(j\omega)=\frac{X(j\omega)}{F(j\omega)}=\frac{b(j\omega)+1}{a_3(j\omega)^3+a_2(j\omega)^2++a_1(j\omega)+a_0}\\
-\end{equation*}
-where:
-\begin{align*}
-b& = R C_a\\
-a_0&=k\\
-a_1&=b+RT_{em}^2+RC_ak\\
-a_2&=m+RbC_a\\
-a_3&=RC_am
-\end{align*}
-The resut is the random force to be applied on the tip in Fourier domain. \todo[inline]{inserire numero figura quantità in dominio di Fourier} shows FRF, displacement and force in frequency domain.Eventually the force is turned in time domain using inverse Fourier transform (\todo[inline]{inserire numero figura forza}).
-\begin{figure}[H]
-		\begin{centering}
+    \subsection{Monte Carlo simulation}
+    In Sec. 3.1 nominal values of tip actuation mechanism parameters have been estimated. However some deviation of the actual mechanism from the nominal one may occur. The simulation is performed through a Monte-Carlo approach: the simulation of the release phase is repeated many times changing the model of the mechanism. The results of this procedure will be the \textit{Probability Density Function} of some relevant quantities
+    \subsubsection{Parameters uncertainty}
+    Two approaches are followed to include parameters uncertainty into the simulation.\\
+    The first one consists in letting each parameter assume in each simulation a random value with a suitable probability distribution. A covariance matrix is computed with the formula:\\
+    \begin{equation*}
+        \Sigma_p=\big(J^T\Sigma_x^{-1}J\big)^{-1}
+    \end{equation*}
+    where J is the jacobian. Being $x_i$ the retraction at i-th time step and $p_j$ the j-th parameter, J is defined as:\\
+    \begin{equation*}
+        J_{ij}=\frac{\partial x_i}{\partial p_j}\\
+    \end{equation*}
+    Jacobian is estimated by performing simulations of the nominal mechanism and of the mechanism with a parameter shifted from nominal one with an high order integrator (\textit{ode113} was adopted for this purpose) and then comparing the responces. Being $res_i$ the residual at i-th time step, $\Sigma_x$ is built as:
+    \begin{equation*}
+        \Sigma_x = 
+        \begin{pmatrix}
+            res_1^2& 0 & \cdots & 0\\
+            0 & res_2^2 & \cdots & 0\\
+            \vdots & \vdots & \ddots & \vdots \\
+            0 & 0 & \cdots & res_N^2
+        \end{pmatrix}
+    \end{equation*}\\
+    A final form for covariance matrix accounts both for identification and \textit{a priori} uncertainties, here quantified as standard deviation $\sigma_0=0.3\times p$ for each parameter. Being $\Sigma_{p,0}^-1$ the a priori covariance matrix, covariance matrix is then defined as:
+    \begin{equation*}
+        \Sigma_p=\big(\Sigma_{p,0}^{-1}+J^T\Sigma_x^{-1}J\big)^{-1}
+    \end{equation*}\\
+    Eventually no correlation is assumed, so off-diagonal elements are ignored.\\
+    The main issue with this approach is the inversion of left hand side of equation \todo[inline]{put previous equation number}, which may yield inaccurate results. In this case, although high conditioning number, results appear consistent. The second approach consists in altering the tip retraction dynamics by a fotce F(t) applied on the tip which generates a displacement with same \textit{Power Spectral Density} (PSD) as the residual. The procedure is depicted in the main steps as follows:
+    \begin{align*}
+        res& & &\text{residuals}\\ 
+        &\Downarrow \\
+        C_{res,res}&=res \ast res & &\text{auto correlation}\\ 
+        &\Downarrow \\ 
+        PSD_{2-sided}&=fft(C_{res,res}) & &\text{Fourier transform}\\
+        &\Downarrow \\
+        PSD\times n_w(j\omega)&=res_{rand} &&\text{white noise filtering}\\
+        &\Downarrow \\
+        F_{rand}(j\omega)&=\frac{res_{rand}}{H(j\omega)} &&\text{force in Fourier domain}\\
+        &\Downarrow\\
+        F_{rand}(t)&=ifft(F_{rand}(j\omega)) &&\text{force in time domain}
+    \end{align*}
+    Residual auto-correletion is transformed into Fourier domain to get the PSD, shown in \todo[inline]{inserire numero figura PSD}. Then a white noise, in frequency domain too, is filtered through the PSD. The filtered noise is a simulated random displacement, in order to use it in the simulation, it must pass through the \textit{Frequency Responce Function} (FRF), here called $H(j\omega)$, whose expression is stated below:
+    \begin{equation*}
+        H(j\omega)=\frac{X(j\omega)}{F(j\omega)}=\frac{b(j\omega)+1}{a_3(j\omega)^3+a_2(j\omega)^2++a_1(j\omega)+a_0}\\
+    \end{equation*}
+    where:
+    \begin{empheq}[left = \empheqlbrace]{align*}
+        b&=R C_a\\
+        a_0&=k\\
+        a_1&=b+RT_{em}^2+RC_ak\\
+        a_2&=m+RbC_a\\
+        a_3&=RC_am
+    \end{empheq}
+    The resut is the random force to be applied on the tip in Fourier domain. \todo[inline]{inserire numero figura quantità in dominio di Fourier} shows FRF, displacement and force in frequency domain.Eventually the force is turned in time domain using inverse Fourier transform (\todo[inline]{inserire numero figura forza}).
+    \begin{figure}[H]
+        \begin{centering}
 			\includegraphics[scale=0.6]{gfx/PSD}
 		\end{centering}
-		\caption{residuals 1-sided PSD in logaritmic plot}
-\end{figure}
+            \caption{residuals 1-sided PSD in logaritmic plot}
+    \end{figure}
 
-This method has two main numerical criticalities:
-\begin{enumerate}
-\item The procedure described would be mathematically exact if signals to process where infinite in extension. The fact that the bandwidth is limited to [$-5\times10^5- 5\times10^5$]Hz (1MHz sampling frequency) is not critical because the low-pass fiter like PSD behaviour is such that high frequences would be anyway filtered away. On the other hand the residual is finite and this makes the auto-convolution inaccurate.
-\item Displacement noise is divided by $H(j\omega)$, which is an FRF with a zero and may lead to numerical issues.
-\end{enumerate}
+    This method has two main numerical criticalities:
+    \begin{enumerate}
+    \item The procedure described would be mathematically exact if signals to process where infinite in extension. The fact that the bandwidth is limited to [$-5\times10^5- 5\times10^5$]Hz (1MHz sampling frequency) is not critical because the low-pass fiter like PSD behaviour is such that high frequences would be anyway filtered away. On the other hand the residual is finite and this makes the auto-convolution inaccurate.
+    \item Displacement noise is divided by $H(j\omega)$, which is an FRF with a zero and may lead to numerical issues.
+    \end{enumerate}
 
-\begin{figure}[H]
+    \begin{figure}[H]
 		\begin{centering}
 			\includegraphics[scale=0.6]{gfx/F_domain}
 		\end{centering}
 		\caption{FRF and examples of residual and force in Fourier domain}
-\end{figure}
-\begin{figure}[H]
+    \end{figure}
+    \begin{figure}[H]
 		\begin{centering}
 			\includegraphics[scale=0.6]{gfx/Force}
 		\end{centering}
 		\caption{An example of random force to be applied to the tip obtained through the described procedure}
-\end{figure}
+    \end{figure}
 
-citazione \cite{latexcompanion}
-\begin{thebibliography}{9}
-\bibitem{latexcompanion} 
-Michel Goossens, Frank Mittelbach, and Alexander Samarin. 
-\textit{The \LaTeX\ Companion}. 
-Addison-Wesley, Reading, Massachusetts, 1993.
- 
-\bibitem{einstein} 
-Albert Einstein. 
-\textit{Zur Elektrodynamik bewegter K{\"o}rper}. (German) 
-[\textit{On the electrodynamics of moving bodies}]. 
-
-\bibitem{knuthwebsite} 
-Knuth: Computers and Typesetting,
-\\\texttt{http://www-cs-faculty.stanford.edu/\~{}uno/abcde.html}
-\end{thebibliography}
-
-    
+% Citazioni
+    citazione \cite{latexcompanion}
+    \begin{thebibliography}{9}
+        \bibitem{latexcompanion} 
+            Michel Goossens, Frank Mittelbach, and Alexander Samarin. 
+            \textit{The \LaTeX\ Companion}. 
+            Addison-Wesley, Reading, Massachusetts, 1993.
+        \bibitem{einstein} 
+            Albert Einstein. 
+        \textit{Zur Elektrodynamik bewegter K{\"o}rper}. (German) 
+    [\textit{On the electrodynamics of moving bodies}]. 
+    \bibitem{knuthwebsite} 
+        Knuth: Computers and Typesetting,
+    \\\texttt{http://www-cs-faculty.stanford.edu/\~{}uno/abcde.html}
+    \end{thebibliography}
 \end{document}
