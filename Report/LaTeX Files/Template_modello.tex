@@ -60,9 +60,10 @@
 
 \section{Introduction}
 	The LISA (Laser Interferometer Space Antenna) Pathfinder mission is a scientific mission aimed at revealing gravitational waves by means of the formation distortion of 3 \textit{Test Masses} (TMs), each one in a different spacecraft, put in a free-falling (geodesic) trajectory.\\
-	Due to weak gravitational waves interaction, any force different from the gravitational ones acting on TMs must be negligible, and the TM release must meet the requirements listed in tab.1:
+	Due to weak gravitational waves interaction, any force different from gravitational ones acting on TMs must be negligible, and the TM release must meet the requirements listed in tab.1:
 	
 	\begin{table}[H]
+	\renewcommand{\arraystretch}{1.1}
 		\begin{centering}
 			\begin{tabular}{l|l} \hline
 				parameter & tolerance \\ \hline
@@ -80,7 +81,7 @@
 	The LISA Pathfinder Grabbing Position and Relase Mechanism (GPRM) is the system aimed to lock and relase the TM into the spacecraft. 
 	In fact, the forementioned TM has to be relased with a nearly zero velocity with respect to the transport spacecraft in order to be correctly injected into a geodesic trajectory. \\
 	This task can be relatively complex, if we think of the possible interactions developing with the support, and because of the electrostatic aspects that may generate disturbing forces. \\
-	Also, least but not last, the quality of the surface of the test mass and of the grabbing finger should be take into account. \\ 
+	Also, least but not last, the quality of the surface of the test mass and of the grabbing finger should be taken into account. \\ 
 	The GPRM mechanism is sketched in Fig 1.
 		
 	\begin{figure}[H]
@@ -90,27 +91,27 @@
 		\caption{GPRM Mechanism}
 	\end{figure}
 	
-	It's main parts are :
+	Its main parts are:
 	\begin{itemize}
-		\item \textit{Grabbing Finger} : holds the TM and positions it prior relase;
-		\item \textit{Finger Tip} : last contact part that pons the TM in position before fast retraction for relase;
-		\item \textit{Low Voltage Piezo Actuator} : used for the positioning and fast Finger Tip relase;
-		\item \textit{NEXLINE actuator} : used for Grabbing Finger movement;
-		\item \textit{Displacemente Sensor} : to measure the axial force acting between the mechanism contacting interface;
+		\item \textit{Grabbing Finger}: holds the TM and positions it prior relase;
+		\item \textit{Finger Tip}: last contact part that pons the TM in position before fast retraction for relase;
+		\item \textit{Low Voltage Piezo Actuator}: used for the positioning and fast Finger Tip relase;
+		\item \textit{NEXLINE actuator}: used for Grabbing Finger movement;
+		\item \textit{Displacemente Sensor}: to measure the axial force acting between the mechanism contacting interface;
 	\end{itemize}
 
 	\subsubsection*{Main Task}
-	The model of the injection procedure consist of three parts.\\
-	The GPRM, the adhesion phenomenon and the TM motion equations.
+	The model of the injection procedure consists of three parts.\\
+	The GPRM, the adhesion phoenomenon and the TM motion equations.
 	Two opposite GPRMs are operated simultaneously in order to hold the
 	TM with the Grabbing Fingers in the center of the Electrode Housing
-	(EH). From this configuration, the procedure can be considered to be symmetrical, as the two mechanism are commanded in the same way :	
+	(EH). From this configuration, the procedure can be considered to be symmetrical, as the two mechanism are commanded in the same way:	
 	\begin{itemize}
 		\item \textbf{Pre-launch and launch phase}
 		\begin{enumerate}
 			\item The TM is held by the Caging Mechanism (CM) at the eight corners;
 		\end{enumerate}
-		\item \textbf{TM Relase from CM}
+		\item \textbf{TM Release from CM}
 		\begin{enumerate}
 			\item The Grabbing Finger is in contact with the TM and the tip is fully retracted;
 		\end{enumerate}
@@ -151,7 +152,7 @@
 	The diagram comprises the release tip mass and washer springs mounted at the extremity of the Grabbing Finger (GF) unit, and the piezo-stack actuator connected to a voltage generator through a discharge resistor R.
 	
 \subsection{The Mathematical Model}
-\subsubsection{Release tip model}
+\subsubsection*{Release tip model}
     A mathematical model for the lumped-element freshly shown can be easily derived by resorting to elementary physical laws, such as the Kirchoff laws and Newton's laws, once the constitutive equations of the piezo-stack actuator are known.
     The most conventional model of a piezo-stack actuator is the one which relies on the linear constitutive equations of piezoelectric materials. \todo[inline]{inserire citazione paper} 
     Such model however is not useful for describing the dynamics of piezo-actuated positioning mechanisms because it neglects the intrinsic dynamics of the actuator. 
@@ -223,40 +224,37 @@
                 \]
     \end{frame}
   where the elements $A_{1,1}$, $A_{1,2}$, $A_{3,1}$, $A_{3,2}$, $A_{3,3}$, $B_{1}$ are unknown and will be estimated in identification (Sec 3.1).
-  \subsubsection{Test mass model}
-  %
+  \subsubsection*{Test mass model}
  TM is easily modeled as a rigid body in free motion, Newton's equations describe linear displacement dynamics
- \begin{align*}
- M\uline{\ddot{x}}_{TM} &= \uline{F}
- %M\ddot{y}_{TM} &= F_y\\
- %M\ddot{z}_{TM} &= F_z
- \end{align*} 
+ \begin{equation*}
+ M\uline{\ddot{x}}_{TM} = \uline{F}
+ \end{equation*} 
  while Euler's equations
- \begin{align*}
+ \begin{equation*}
  \uuline{J}\uline{\dot{\omega}}+\uuline{J}\uline{\omega}\times\uline{\omega}=\uline{M}
- \end{align*}
+ \end{equation*}
  can be simplified in this case since inertia moment I is the same for each of the 3 principal axes ($J_{i,j} =I \delta_{i,j}$) and describe angular dynamics
- \begin{align*}
- I\uline{\dot{\omega}}&=\uline{M}
- \end{align*}
+ \begin{equation*}
+ I\uline{\dot{\omega}}=\uline{M}
+ \end{equation*}
  To complete the model, a set of kinematic equations for angular motion shall be considered
  \begin{equation*}
- \uuline{\dot{A}}+\big[\uuline{\omega}^{\wedge}\big]\uuline{A} =0
+ \uuline{\dot{A}}+\uuline{\big[\omega^{\wedge}\big]}\uuline{A} =0
  \end{equation*}
- This last equation can be substituted by different models i.e. Euler Angles kinematic equations that can be more suitable. A simplified model have been derived considering system simmetry. Force components on y and z axes arise due to TM rotation. Angular velocity is expected to be of the order of few $\mu rad/s$, the contact between TM and RTs lasts much less than $1 ms$, as a result rotation angle is a fraction of $nrad$ and is neglected. Rotation arises for a modeled misalignment on y-axis only. So the linear dynamics as well as the rotational ones occur on one axis only. Therefore System is widely symplified:
+ This last equation can be substituted by different models i.e. Euler Angles kinematic equations that can be more suitable. A simplified model have been derived considering system simmetry. Force components on y and z axes arise due to TM rotation. Angular velocity is expected to be of the order of few $\mu rad/s$, the contact between TM and RTs lasts much less than $1 ms$, as a result rotation angle is a fraction of $nrad$ and his effects on contact force are neglected. Morover, rotation arises for a modeled misalignment on y-axis only the rotational dynamics and kinematics as well as the linear ones occur on one axis only. The system is therefore widely symplified:
  \begin{align}
- &M\ddot{x_T}=F\\ 	
+ &M\ddot{x}_TM=F\\ 	
  &I\dot{\omega}=M\\ 
  &\dot{\theta}=\omega
  \end{align}
-  \subsubsection{Adhesion force model}
+  \subsubsection*{Adhesion force model}
   \begin{table*}
   \setlength{\tabcolsep}{0.35 cm}
   \renewcommand{\arraystretch}{1.2}
   \begin{tabular}{c| c c|c c|c c }
   \textbf{Coefficient} & \multicolumn{2}{c|}{\textbf{set 1}}&\multicolumn{2}{c|}{\textbf{set 2}}& \multicolumn{2}{c}{\textbf{set 3}}\\
   &mean value & std.dev. & mean value & std.dev. &mean value & std.dev. \\ \hline
-  $X_1$& $0.50$&$2.59 \times 10^{-2}$ & $ 0.357$ & $ 7.30 \times 10^{-2}$ &$0.457$ & $3.58 \times 10^{-2}$\\
+  $X_1$& $0.503$&$2.59 \times 10^{-2}$ & $ 0.357$ & $ 7.30 \times 10^{-2}$ &$0.457$ & $3.58 \times 10^{-2}$\\
   $X_2$ & $2.89$ & $2.75 \times 10^{-1}$ & $1.32$ & $1.59\times 10^{-1}$ & $1.73$ & $1.22\times 10^{-1}$\\
   $X_3$ & $2.36$ & $4.76\times 10^{-2}$ & $2.07$ & $2.14 \times 10^{-1}$ & $1.27$ & $2.98 \times 10^{-1}$\\
   \end{tabular}
@@ -281,14 +279,41 @@ The MATLAB \textbf{lsqcurvefitting} routine is then used to perform a least squa
 		\end{centering}
 		\caption{Adhesion force sampled data and fittings}
 \end{figure}
-\subsubsection{Contact force model and preload}
-
+\subsubsection*{Contact force model and preload}
+During \textit{pass-over} operation (Sec. 2.1), just before TM release, RT reduces the force on TM to the lowest acceptable level that still controls the TM, generating a preload on the RT. This value is of the order of 0.1N \todo[inline]{bortoluzzi 1 2}, in this report is considered 0.3N. The presence of the preload alters the initial elongation of RT which is easily computed solving the steady state system for release tip:
+\begin{equation*}
+\uuline{A}\uline{x} + \uuline{B}
+\begin{pmatrix}
+E_0\\F_0
+\end{pmatrix}
+ = 0\\
+\end{equation*}
+being $E_0 = 120 V$ and $F_0 = 0.3 N$ initial steady state input vector components.\\
+Another issue is to model the force between TM and RT. This force in an ideal point of view is a dirac delta of the elongation (reaction force different from 0 for 0 elongation only), but for numerical reasons it must be described as a continous function. The following description is then adopted, depicted in figure \todo[inline]{figure number}, considering $\Delta l$ in $\mu m$\\
+\begin{align*}
+&F = 0.3N & &\text{if} & &\Delta l <0\\
+&F =( -3\times 10^2 + 0.3) N & &\text{if} & 0< &\Delta l<10^{-3}\\
+&F = 0N & &\text{if} & &\Delta l>10^{-3}
+\end{align*}
+\begin{figure}
+		\begin{centering}
+			\includegraphics[scale=0.6]{gfx/Push_mdl}
+			
+		\end{centering}
+		\caption{Model of the pushing force as function of the elongation}
+\end{figure}
+Provided that central linear part passes to point (0,0.3), so that the description exploits the fact that largest RT pushing force on TM is $0.3N$ (unloading spring like behaviour), only one parameter is arbitrary: the elongation at which F goes to zero (the treshold at which pushing force starts to act), here chosen as $\Delta l = 10^{-3} \mu m$. The choice of this parameter is driven by the following considerations:
+\begin{enumerate}
+\item{push force must not occur when adhesion force is acting, so max. $10^{-2}$ considering that adhesion force has a maximum around $10^{-1} \mu m$}
+\item{In \todo[inline]{bortoluzzi 2} there is a depiction of RT surface roughtness}
+\item{Simulation results variation is small if the parameter is chosen in a certain domain, which is approximately $[10^{-4} : 10^{-2}] \mu m$}
+\end{enumerate}
 \section{Simulation}
 \begin{table*}[t]
 \setlength{\tabcolsep}{0.5 cm}
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{|c |c c c c c|}\hline
-parameter & guessed value & lower bound & upper bound & identified value & unit \\ \hline
+parameter & guess value & lower bound & upper bound & identified value & units \\ \hline
 $C_a$ & $4.8\times 10^{-7}$ & 0 & $10^{-6}$ & $3.936 \times 10^{-7}$ & F \\
 $T_{em}$ & $1.5$ & 0 & - & $1.51$ & $\sqrt{\nicefrac{FN}{m}}$ \\
 R & 400 & 100 & 800 &417 & $\Omega$\\
@@ -355,8 +380,9 @@ Identification is performed with MATLAB \textbf{pem} command using the Levenberg
 Estimated parameters are reported in Table 3. Figure 4 shows the comparison between experimental and identified model responce. Residuals are small, always <1\% of max. tip retraction, their RMS is $x_{T,rms}=84 nm$.\\
 
 \subsection{Monte Carlo simulation}
-In Sec. 3.1 nominal values of tip actuation mechanism parameters have been estimated. However some deviation of the actual mechanism from the nominal one may occur. The simulation is performed through a Monte-Carlo approach: the simulation of the release phase is repeated many times changing the model of the mechanism. The results of this procedure will be the \textit{Probability Density Function} of some relevant quantities
-\subsubsection{Parameters uncertainty}
+In Sec. 3.1 nominal values of tip actuation mechanism parameters have been estimated. However some deviation of the actual mechanism from the nominal one may occur. In particular uncertainties arise from identification uncertainties and \textit{a priori} variance of parameters, uncertainty on contact force coefficients (which is a poorly repeatble phoenomenon), initial misalignment of RTs with respect to TM baricenter and asymmetry coming from a time lag on RT actuation. In order to generate an angular momentum on TM, an initial misalignment RTs is considered as a gaussian distribution with standard deviation $\sigma=100 \mu m$, which is $\nicefrac{1}{10}$ of RT emispheric contact surface diameter ($d = 1 mm$).
+ The simulation is performed through a Monte-Carlo approach, repeating many times, 5000 times for each of the 3 adhesion force fittings, changing the model of the mechanism. The results of this procedure will be the \textit{Probability Density Function} of linear and angular velocities. 
+\subsubsection*{Parameters uncertainty}
 Two approaches are followed to include parameters uncertainty into the simulation.\\
 The first one consists in letting each parameter assume in each simulation a random value with a suitable probability distribution. A covariance matrix is computed with the formula:\\
 \begin{equation*}
@@ -366,7 +392,7 @@ where J is the jacobian. Being $x_i$ the retraction at i-th time step and $p_j$ 
 \begin{equation*}
 J_{ij}=\frac{\partial x_i}{\partial p_j}\\
 \end{equation*}
-Jacobian is estimated by performing simulations of the nominal mechanism and of the mechanism with a parameter shifted from nominal one with an high order integrator (\textit{ode113} was adopted for this purpose) and then comparing the responces. Being $res_i$ the residual at i-th time step, $\Sigma_x$ is built as:
+Jacobian is estimated by performing simulations of the nominal mechanism and of the mechanism with a parameter shifted from nominal one with an high order integrator (MATLAB routine \textit{ode113} was adopted for this purpose) and then comparing the responces. Being $res_i$ the residual at i-th time step, $\Sigma_x$ is built as:
 \begin{equation*}
 \Sigma_x = 
 \begin{pmatrix}
@@ -376,15 +402,15 @@ res_1^2& 0 & \cdots & 0\\
 0 & 0 & \cdots & res_N^2
 \end{pmatrix}
 \end{equation*}\\
-A final form for covariance matrix accounts both for identification and \textit{a priori} uncertainties, here quantified as standard deviation $\sigma_0=0.3\times p$ for each parameter. Being $\Sigma_{p,0}^-1$ the a priori covariance matrix, covariance matrix is then defined as:
-\begin{equation*}
+A final form for covariance matrix accounts both for identification and \textit{a priori} uncertainties, here quantified as standard deviation $\sigma_0=0.3\times p$ for each parameter. Being $\Sigma_{p,0}^{-1}$ the a priori covariance matrix, covariance matrix is then defined as:
+\begin{equation}
 \Sigma_p=\big(\Sigma_{p,0}^{-1}+J^T\Sigma_x^{-1}J\big)^{-1}
-\end{equation*}\\
+\end{equation}
 Eventually no correlation is assumed, so off-diagonal elements are ignored.\\
-The main issue with this approach is the inversion of left hand side of equation \todo[inline]{put previous equation number}, which may yield inaccurate results. In this case, although high conditioning number, results appear consistent. The second approach consists in altering the tip retraction dynamics by a fotce F(t) applied on the tip which generates a displacement with same \textit{Power Spectral Density} (PSD) as the residual. The procedure is depicted in the main steps as follows:
+The main issue with this approach is the inversion on right hand side in equation \todo[inline]{put previous equation number}, which may yield inaccurate results. In this case, although high conditioning number, results appear consistent. The second approach consists in altering the tip retraction dynamics by a fotce F(t) applied on the tip which generates a displacement with same \textit{Power Spectral Density} (PSD) as the residual. The procedure is depicted in the main steps as follows:
 
 \begin{align*}
-res& & &\text{residuals}\\ 
+r&es & &\text{residuals}\\ 
 &\Downarrow \\
 C_{res,res}&=res \ast res & &\text{auto correlation}\\ 
 &\Downarrow \\ 
@@ -408,7 +434,7 @@ a_1&=b+RT_{em}^2+RC_ak\\
 a_2&=m+RbC_a\\
 a_3&=RC_am
 \end{align*}
-The resut is the random force to be applied on the tip in Fourier domain. \todo[inline]{inserire numero figura quantità in dominio di Fourier} shows FRF, displacement and force in frequency domain.Eventually the force is turned in time domain using inverse Fourier transform (\todo[inline]{inserire numero figura forza}).
+The result is the random force to be applied on the tip in Fourier domain. \todo[inline]{inserire numero figura quantità in dominio di Fourier} shows FRF, displacement and force in frequency domain.Eventually the force is turned in time domain using inverse Fourier transform (\todo[inline]{inserire numero figura forza}).
 \begin{figure}[H]
 		\begin{centering}
 			\includegraphics[scale=0.6]{gfx/PSD}
@@ -418,7 +444,7 @@ The resut is the random force to be applied on the tip in Fourier domain. \todo[
 
 This method has two main numerical criticalities:
 \begin{enumerate}
-\item The procedure described would be mathematically exact if signals to process where infinite in extension. The fact that the bandwidth is limited to [$-5\times10^5- 5\times10^5$]Hz (1MHz sampling frequency) is not critical because the low-pass fiter like PSD behaviour is such that high frequences would be anyway filtered away. On the other hand the residual is finite and this makes the auto-convolution inaccurate.
+\item The procedure described would be mathematically exact if signals to process where infinite in extension. The fact that the bandwidth is limited to [$-5\times10^5- 5\times10^5$]Hz (1MHz sampling frequency) is not critical because of the low-pass fiter like PSD behaviour is such that higher frequences would be filtered out anyway. On the other hand the residual is finite and this makes the auto-convolution inaccurate.
 \item Displacement noise is divided by $H(j\omega)$, which is an FRF with a zero and may lead to numerical issues.
 \end{enumerate}
 
@@ -433,6 +459,86 @@ This method has two main numerical criticalities:
 			\includegraphics[scale=0.6]{gfx/Force}
 		\end{centering}
 		\caption{An example of random force to be applied to the tip obtained through the described procedure}
+\end{figure}
+\subsubsection*{Time lag}
+Just before TM release, the two RTs have to exert a force (here considered 0.3N) as low as possible but high enough to control the TM. A time lag between actuation of the two RTs breaks the symmetry of the system, and causes the preload force on one tip to acelerate the TM. In order to evaluate an appropriate value for the lag, a procedure is presented in Bortoluzzi \todo[inline]{bortoluzzi 2}. Trivial computations yield that if push force is constant then it takes $t = 32 \mu s$ to reach the limiting velocity of $5 \nicefrac{\mu m}{s}$. But tip behaviour is unloading spring like (not constant force). Oscillation period is a good evaluation of the time scale of an unloading spring.
+\begin{equation*}
+T = \frac{2\pi}{\sqrt{\nicefrac{k}{M}}} = 2.2 ms
+\end{equation*}
+which is far larger than time with constant force. So time lag is modeled with a uniform PDF $30 \mu s$ wide. The time lag is applied to left tip actuation while right tip is always actuated at time $t_0=0$, so the push force is from left to right. This is done for two reasons:
+\begin{enumerate}
+\item{A time lag on two sides would lead to a symmetric PDF. Computing a one sided one requires half the experiments to perform in the Monte Carlo to obtain the same accuracy}
+\item{The time lag statistic properties are simplier, which is convenient for results sensitivity analysis}
+\end{enumerate}
+\subsubsection*{Integrator choice}
+Two criterions have been followed to choose the integration routine.
+\begin{enumerate}
+\item{The simulation is performed to obtain residual velocity, which is expected to be no larger than $5 \nicefrac{\mu m}{s}$. The result will be than distributed into 50 bins, expeted to be $0.1 \nicefrac{\mu m}{s}$ wide, to compute PDF histogram. Then precision on results must be guaranteed on two decimals only. Therfore the adoption of an integrator of order higher than 3 is useless.} 
+\item{Stiffness of RT system is quatified with parameter $S=\nicefrac{\lambda_{max}}{\lambda_{min}}=161$ where $\lambda$ are eigenvalues of the matrix of RT system as it is defined in Sec. 2.1. It is relevant that this value holds for nominal system, while for the real one a small variation occurs. Anyway the system is suspected to be moderately stiff.} 
+\end{enumerate}
+\todo[inline]{inserire figura autovalori}
+The following solvers are considered as good candidates:
+\begin{itemize}
+\item{\textbf{ode23}: Implements the \textit{Bogacki-Shampine} method, a veriable step explicit RKF order 2 solver with step size control of order 3. The number of function evaluations for each step is 4. It is recommended for non-stiff system when crude tolerances are admissible}
+\item{\textbf{ode23s}: A single step solver based on \textit{implicit RK}. Although it requires less time steps than any explicit routine, it may be computationally expensive since number of function evaluation depends on an internal Newton-Rapson subroutine (also needs to compute the jacobian) to solve the implicit equation. Shall be used if the problem is stiff}
+\item{\textbf{ode23t}: An implementation of the trapezoidal rule through an interpolant. The method is implicit and an internal simplified Newton subroutine solves the implicit equation, so again the number function evaluations per step is not fixed. It is recommanded for moderately stiff problems}
+\item{\textbf{ode23tb}: Similar to the previous one. Applies a \textit{trapezoidal rule} formula for first stage and a \textit{backward interpolation} formula for second stage.}
+\end{itemize}
+A small Monte Carlo simulation of 50 experiments have been done to test efficiency of integration schemes for solution of this specific problem. Table 4 shows results of this procedure.\\
+\begin{table}[h]
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{l||c|c}
+\textbf{Integrator} &Number of time steps & CPU time [s]\\ \hline
+\textbf{ode23} & 501 & 0.0538\\
+\textbf{ode23s} & 88 & 0.0558\\
+\textbf{ode23t} & 129 & 0.0275\\
+\textbf{ode23tb} & 97 & 0.0202
+\end{tabular}
+\caption{mean time steps number and mean CPU time for each of the four integration schemes considered}
+\end{table}
+
+\section{Results and future work}
+\begin{table*}[t]
+\setlength{\tabcolsep}{0.75 cm}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{c| c c c |c c c}
+ & \multicolumn{3}{c|}{through parameters covariance} & \multicolumn{3}{c}{through noise filtering}\\
+adhesion set used & \textbf{set 1} & \textbf{set 2} & \textbf{set 3} & \textbf{set 1} & \textbf{set 2} & \textbf{set 3}\\ \hline
+$V_{res,3\sigma} [\nicefrac{\mu m}{s}]$ & 4.66 & 5.38 & 5.20 & 4.6 & 4.6 & 5.24 \\
+$\omega_{res,3\sigma} [\nicefrac{\mu rad}{s}]$ & 2.16 & 2.22 & 2.04 & 2.2 & 2.2 & 2.04
+\end{tabular}
+\caption{$3\sigma$ linear and angular residual velocities}
+\end{table*}
+PDF resulting from Monte Carlo simulation are shown in figures \todo[inline]{insert PDF figures numbers}, $3\sigma$ velocities are reported in Table 5.\\
+\begin{figure}[H]
+		\begin{centering}
+			\includegraphics[scale=0.6]{gfx/V_PDF}
+		\end{centering}
+		\caption{Residual velocity PDF computed through parameters covariance for each of the 3 adhesion sets}
+		\label{fig:PDF}
+\end{figure}
+\begin{figure}[H]
+		\begin{centering}
+			\includegraphics[scale=0.6]{gfx/V_noise_PDF}
+		\end{centering}
+		\caption{Residual velocity PDF computed through noise filtering for each of the 3 adhesion sets}
+\end{figure}
+\begin{figure}[H]
+		\begin{centering}
+			\includegraphics[scale=0.6]{gfx/W_PDF}
+		\end{centering}
+		\caption{Residual angular velocity PDF computed through parameters covariance for each of the 3 adhesion sets}
+\end{figure}
+\begin{figure}[H]
+		\begin{centering}
+			\includegraphics[scale=0.6]{gfx/W_noise_PDF}
+		\end{centering}
+		\caption{Residual angular velocity PDF computed through noise filtering for each of the 3 adhesion sets}
+\end{figure}
+Some interesting considerations can be made on the results. It is clear that the two methods used to introduce identification error yield almost equal results, even though they are expected to behave differently, at least for the fact that in the estimation of the covariance matrix an additional standard deviation ($\sigma_{pp} = 0.3\times p$), accounting for \textit{a priori} parameter deviation from nominal ones, have been included. This suggests that parameters deviation from nominal, at least as long as it is bounded under a certain treshold, affects lowly the residual velocities. Effects of adhesion force have been investigated yet (i.e. in Bortoluzzi \todo[inline]{Reference Bortoluzzi 2} and they are low with respect to limiting velocity required. On the contrary effects of preload and time lag are predominant: The PDF in figures  \todo[inline]{insert PDF linear velocity figures numbers} shows a uniform shape. As a matter of fact linear velocity PDF follows the time lag distribution. Fig. \todo[inline]{numero figura sensitivity test} shows how lag time affects residual velocity. Another important result is that as long as the target is to limit velocity to $5 \nicefrac{\mu m}{s}$ effects of prestress are indipendent from parameters and adhesion uncertainties, which is an expected result from considerations done in Sec. 3.2 (\textit{Time lag} subsection). These consideration lead to the result that future design aimed to limit the residual velocity after release within stated constraints specified in tab. 1 will have to focus on reduction of the time lag between RT actuations and of the prerelease load, since this two are by far the most effective parameters on residual quantities.
+\begin{figure}[H]
+	\includegraphics[scale=0.6]{gfx/sens_test}
+	\caption{Behaviour of residual velocity PDF generated by different time lags: doubling time lag PDF width doubles the residual velocity one}
 \end{figure}
 
 citazione \cite{latexcompanion}
@@ -451,6 +557,4 @@ Albert Einstein.
 Knuth: Computers and Typesetting,
 \\\texttt{http://www-cs-faculty.stanford.edu/\~{}uno/abcde.html}
 \end{thebibliography}
-
-    
 \end{document}
