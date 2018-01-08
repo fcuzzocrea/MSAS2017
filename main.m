@@ -42,21 +42,21 @@ end
 %set 1
 l = linspace(0,3,100);
 figure
-plot(l*1e-6,X_adh(1,1)*l.*exp(-X_adh(1,2)*l.^(X_adh(1,3))),'r',set(1).exp(1).el*1e-6,set(1).exp(1).F,'.r',set(1).exp(2).el*1e-6,set(1).exp(2).F,'.r'...
-    ,set(1).exp(3).el*1e-6,set(1).exp(3).F,'.r',set(1).exp(4).el*1e-6,set(1).exp(4).F,'.r',set(1).exp(5).el*1e-6,set(1).exp(5).F,'.r')
+plot(l,X_adh(1,1)*l.*exp(-X_adh(1,2)*l.^(X_adh(1,3))),'r',set(1).exp(1).el,set(1).exp(1).F,'.r',set(1).exp(2).el,set(1).exp(2).F,'.r'...
+    ,set(1).exp(3).el,set(1).exp(3).F,'.r',set(1).exp(4).el,set(1).exp(4).F,'.r',set(1).exp(5).el,set(1).exp(5).F,'.r')
 grid on
 hold on
 %set 2
-plot(l*1e-6,X_adh(2,1)*l.*exp(-X_adh(2,2)*l.^(X_adh(2,3))),'g',set(2).exp(1).el*1e-6,set(2).exp(1).F,'.g',set(2).exp(2).el*1e-6,set(2).exp(2).F,'.g'...
-    ,set(2).exp(3).el*1e-6,set(2).exp(3).F,'.g',set(2).exp(4).el*1e-6,set(2).exp(4).F,'.g',set(2).exp(5).el*1e-6,set(2).exp(5).F,'.g')
+plot(l,X_adh(2,1)*l.*exp(-X_adh(2,2)*l.^(X_adh(2,3))),'g',set(2).exp(1).el,set(2).exp(1).F,'.g',set(2).exp(2).el,set(2).exp(2).F,'.g'...
+    ,set(2).exp(3).el,set(2).exp(3).F,'.g',set(2).exp(4).el,set(2).exp(4).F,'.g',set(2).exp(5).el,set(2).exp(5).F,'.g')
 %set 3
-plot(l*1e-6,X_adh(3,1)*l.*exp(-X_adh(3,2)*l.^(X_adh(3,3))),'b',set(3).exp(1).el*1e-6,set(3).exp(1).F,'.b',set(3).exp(2).el*1e-6,set(3).exp(2).F,'.b'...
-    ,set(3).exp(3).el*1e-6,set(3).exp(3).F,'.b',set(3).exp(4).el*1e-6,set(3).exp(4).F,'.b',set(3).exp(5).el*1e-6,set(3).exp(5).F,'.b')
+plot(l,X_adh(3,1)*l.*exp(-X_adh(3,2)*l.^(X_adh(3,3))),'b',set(3).exp(1).el,set(3).exp(1).F,'.b',set(3).exp(2).el,set(3).exp(2).F,'.b'...
+    ,set(3).exp(3).el,set(3).exp(3).F,'.b',set(3).exp(4).el,set(3).exp(4).F,'.b',set(3).exp(5).el,set(3).exp(5).F,'.b')
 grid on
 title('Experimental and fitted data')
-xlabel('Elongation [m]')
+xlabel('$\Delta l [\mu m]$','interpreter','latex')
 ylabel('Force [N]')
-axis([0 3e-6 0 0.16]);
+axis([0 3 0 0.16]);
 
 %% identification
 % define system to identify
@@ -119,11 +119,11 @@ res = y_i - y_exp;               %model error w.r.t. experiment
 s_y = res*res'/length(res);      %variance of the residual 
 y_rms = sqrt(s_y);               %r.m.s. error
 subplot(2,1,2)
-plot(t_i,res)
+plot(t_i,res*1e6)
 grid on
 title('residuals')
-xlabel('Time (seconds)')
-ylabel('residual value [m]')
+xlabel('Time [s]','interpreter','latex')
+ylabel('residual value [$\mu m$]','interpreter','latex')
 r = diag(1./((res.^2)));
 
 % stability analysis
@@ -271,20 +271,20 @@ close(h)
 % statistical analysis
 figure
 hold on
-h1 = histogram(V_res(1,:),'Normalization','Probability','NumBins',50,'BinLimits',[-2e-6,7e-6]);
-h2 = histogram(V_res(2,:),'Normalization','Probability','NumBins',50,'BinLimits',[-2e-6,7e-6]);
-h3 = histogram(V_res(3,:),'Normalization','Probability','NumBins',50,'BinLimits',[-2e-6,7e-6]);
+h1 = histogram(V_res(1,:)*1e6,'Normalization','Probability','NumBins',50,'BinLimits',[-2,7]);
+h2 = histogram(V_res(2,:)*1e6,'Normalization','Probability','NumBins',50,'BinLimits',[-2,7]);
+h3 = histogram(V_res(3,:)*1e6,'Normalization','Probability','NumBins',50,'BinLimits',[-2,7]);
 title('residual TM linear velocity PDF')
-xlabel('residual velocity [m/s]')
+xlabel('residual velocity [$\frac{\mu m}{s}$]','interpreter','latex')
 legend('set 1','set 2','set 3')
 
 figure
 hold on
-k1 = histogram(abs(W_res(1,:)),'Normalization','Probability','NumBins',50,'BinLimits',[0, 3e-6]);
-k2 = histogram(abs(W_res(2,:)),'Normalization','Probability','NumBins',50,'BinLimits',[0, 3e-6]);
-k3 = histogram(abs(W_res(3,:)),'Normalization','Probability','NumBins',50,'BinLimits',[0, 3e-6]);
+k1 = histogram(abs(W_res(1,:)*1e6),'Normalization','Probability','NumBins',50,'BinLimits',[0, 3]);
+k2 = histogram(abs(W_res(2,:)*1e6),'Normalization','Probability','NumBins',50,'BinLimits',[0, 3]);
+k3 = histogram(abs(W_res(3,:))*1e6,'Normalization','Probability','NumBins',50,'BinLimits',[0, 3]);
 title('residual TM angular velocity PDF')
-xlabel('residual angular velocity [rad/s]')
+xlabel('residual angular velocity [$\frac{\mu rad}{s}$]','interpreter','latex')
 legend('set 1','set 2','set 3')
 % compute 3 sigma residual velocity
 V_res_3s = zeros(3,1);
@@ -340,6 +340,11 @@ while K<0.997 && i<n
 end
 W_res_3s(3) = k3.BinEdges(i-1);         %3 sigma residual angular velocity
 
+%print residual quantities
+fprintf('\nparameters estimation simulation results: \t set 1  \t set 2  \t set 3  \n')
+fprintf(['3',char(963),'  residual linear velocity   [',char(956),'m/s]: \t %f \t %f \t %f \n'],V_res_3s(1),V_res_3s(2),V_res_3s(3))
+fprintf(['3',char(963),' residual angular velocity [',char(956),'rad/s]: \t %f \t %f \t %f \n'],W_res_3s(1),W_res_3s(2),W_res_3s(3))
+
 %% Simulation with noise evaluation
 % weighting filter characterization
 C_rr= conv(res, res);
@@ -350,8 +355,8 @@ figure
 fr = linspace(1,5e5,length(PSD));
 loglog(fr,real(PSD))
 title('post-fit residuals PSD')
-xlabel('Freq. [Hz]')
-ylabel('PSD [m/sqrt(Hz)]')
+xlabel('Frequency [Hz]','interpreter','latex')
+ylabel('PSD [$m/\sqrt{Hz}$]','interpreter','latex')
 grid on
 
 % System FRF
@@ -393,10 +398,10 @@ xlabel('frequency [Hz]')
 %residual in time domain
 X = ifft([x,x(end:-1:1)],'symmetric');
 figure
-plot(linspace(0,4e-4,length(X)),abs(X))
+plot(linspace(0,4e-4,length(X)),abs(X)*1e6)
 title('simulated residual in time domain')
 xlabel('t [s]')
-ylabel('res [m]')
+ylabel('res [$\mu m$]','interpreter','latex')
 
 % noise force in time domain
 f_n = ifft([F_n,F_n(end:-1:1)],'symmetric');        %force as function of time
@@ -450,11 +455,11 @@ plot(t_s,x_s(:,8))
 % statistical analysis: plot PDF and compute 3 sigma residual velocity
 figure
 hold on
-hn_1 = histogram(V_res_noise(1,:),'Normalization','Probability','NumBins',50,'BinLimits',[-1e-6,7e-6]);
-hn_2 = histogram(V_res_noise(2,:),'Normalization','Probability','NumBins',50,'BinLimits',[-1e-6,7e-6]);
-hn_3 = histogram(V_res_noise(3,:),'Normalization','Probability','NumBins',50,'BinLimits',[-1e-6,7e-6]);
+hn_1 = histogram(V_res_noise(1,:)*1e6,'Normalization','Probability','NumBins',50,'BinLimits',[-1,7]);
+hn_2 = histogram(V_res_noise(2,:)*1e6,'Normalization','Probability','NumBins',50,'BinLimits',[-1,7]);
+hn_3 = histogram(V_res_noise(3,:)*1e6,'Normalization','Probability','NumBins',50,'BinLimits',[-1,7]);
 title('residual TM velocity PDF (through noise filtering)')
-xlabel('residual velocity [m/s]')
+xlabel('residual velocity [$\mu m/s]$','interpreter','latex')
 legend('set 1','set 3','set 3')
 
 % 3 sigma quantities
@@ -490,11 +495,11 @@ V_res_noise_3s(3) = hn_3.BinEdges(i-1);         %3 sigma residual linear velocit
 % angular velocity
 figure
 hold on
-kn_1 = histogram(W_res_noise(1,:),'Normalization','Probability','NumBins',50,'BinLimits',[-3e-6,3e-6]);
-kn_2 = histogram(W_res_noise(2,:),'Normalization','Probability','NumBins',50,'BinLimits',[-3e-6,3e-6]);
-kn_3 = histogram(W_res_noise(3,:),'Normalization','Probability','NumBins',50,'BinLimits',[-3e-6,3e-6]);
+kn_1 = histogram(abs(W_res_noise(1,:))*1e6,'Normalization','Probability','NumBins',50,'BinLimits',[0,3]);
+kn_2 = histogram(abs(W_res_noise(2,:))*1e6,'Normalization','Probability','NumBins',50,'BinLimits',[0,3]);
+kn_3 = histogram(abs(W_res_noise(3,:))*1e6,'Normalization','Probability','NumBins',50,'BinLimits',[0,3]);
 title('residual TM angular velocity PDF (through noise filtering)')
-xlabel('residual angular velocity [rad/s]')
+xlabel('residual angular velocity [$\mu rad/s$]','interpreter','latex')
 legend('set 1','set 3','set 3')
 
 % set 1
@@ -523,6 +528,11 @@ while K<0.997 && i<length(kn_3.Values)
     i = i + 1;
 end
 W_res_noise_3s(3) = kn_3.BinEdges(i-1);         %3 sigma residual angular velocity
+
+%print residual quantities
+fprintf('noise filtering simulation results: \t  set 1  \t  set 2  \t   set3 \n')
+fprintf(['3',char(963),'  residual linear velocity [',char(956),'m/s]: \t %f \t %f \t %f \n'],V_res_noise_3s(1),V_res_noise_3s(2),V_res_noise_3s(3))
+fprintf(['3',char(963),' residual angular velocity [',char(956),'rad/s]: \t %f \t %f \t %f \n'],W_res_noise_3s(1),W_res_noise_3s(2),W_res_noise_3s(3))
 
 %% sensitivity tests
 V_res_test = zeros(3,n);
@@ -556,9 +566,9 @@ end
 close(h)
 figure
 hold on
-l2 = histogram(V_res_test(3,:),'Normalization','Probability','NumBins',50,'BinLimits',[-1e-6,10e-6]);
-l  = histogram(V_res_test(1,:),'Normalization','Probability','NumBins',50,'BinLimits',[-1e-6,10e-6]);
-l1 = histogram(V_res_test(2,:),'Normalization','Probability','NumBins',50,'BinLimits',[-1e-6,10e-6]);
+l2 = histogram(V_res_test(3,:)*1e6,'Normalization','Probability','NumBins',70,'BinLimits',[-1,10]);
+l  = histogram(V_res_test(1,:)*1e6,'Normalization','Probability','NumBins',70,'BinLimits',[-1,10]);
+l1 = histogram(V_res_test(2,:)*1e6,'Normalization','Probability','NumBins',70,'BinLimits',[-1,10]);
 title('residual TM linear velocity PDF with different max time lag')
-xlabel('residual linear velocity [m/s]')
-legend('15e-6 [s]','30e-6 [s]','60e-6 [s]')
+xlabel('residual linear velocity [$\mu m/s$]','interpreter','latex')
+legend('15 \mus','30 \mus','60 \mus')
